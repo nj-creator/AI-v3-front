@@ -1,6 +1,5 @@
 import {
   Box,
-  Button,
   Divider,
   MenuItem,
   Select,
@@ -17,7 +16,6 @@ import {
   Save,
 } from "@mui/icons-material";
 import { useState } from "react";
-import { postData } from "../utils/serverHelper";
 import {
   cameraAngleData,
   colorTypeData,
@@ -28,7 +26,7 @@ import {
 import { useFrame } from "../hooks/useFrame";
 import { LoadingButton } from "@mui/lab";
 
-const FrameEditMainComponent = ({ frameData, selectedFrame, closeEditBar }) => {
+const FrameEditMainComponent = ({ frameData, selectedFrame, closeEditBar,setSelectedFrameUrl }) => {
   const { updateRegeneratedFrame } = useFrame();
   const [loading, setLoading] = useState(false);
   const [requestData, setRequestData] = useState({
@@ -42,26 +40,17 @@ const FrameEditMainComponent = ({ frameData, selectedFrame, closeEditBar }) => {
 
   const handleGenerateClick = async () => {
     setLoading(true);
-    try {
-      var image = document.getElementById("imageCanvas");
-      var mask = document.getElementById("drawingCanvas");
-      const formData = new FormData();
-      formData.append("maskImage", mask.toDataURL("image/png"));
-      formData.append("baseImage", image.toDataURL("image/jpeg"));
-      formData.append("prompt", requestData.description);
-      formData.append("height", image.height);
-      formData.append("width", image.width);
-      formData.append("inpainting_action", requestData.inpaintingType);
-      formData.append("frame_id", frameData[selectedFrame]._id);
-
-      const data = await postData("/frame/regenerate", formData);
-      updateRegeneratedFrame(selectedFrame, data.data);
-      setLoading(false);
-      closeEditBar();
-    } catch (error) {
-      setLoading(false);
-      console.log(error, "regenerate frame error");
-    }
+    var image = document.getElementById("imageCanvas");
+    var mask = document.getElementById("drawingCanvas");
+    const formData = new FormData();
+    formData.append("maskImage", mask.toDataURL("image/png"));
+    formData.append("baseImage", image.toDataURL("image/jpeg"));
+    formData.append("prompt", requestData.description);
+    formData.append("height", image.height);
+    formData.append("width", image.width);
+    formData.append("inpainting_action", requestData.inpaintingType);
+    formData.append("frame_id", frameData[selectedFrame]._id);
+    await updateRegeneratedFrame(formData,selectedFrame,closeEditBar,setLoading,setSelectedFrameUrl);
   };
 
   const dropdownData = [

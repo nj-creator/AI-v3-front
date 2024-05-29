@@ -32,7 +32,7 @@ const style = {
   left: "50%",
   transform: "translate(-50%, -50%)",
   width: "720px",
-  height: "660px",
+  // height: "660px",
   bgcolor: "background.paper",
   borderRadius: "16px",
   boxShadow: 24,
@@ -48,7 +48,7 @@ const NewSceneButton = () => {
       title: "",
       script: "",
       location: "",
-      genre: genreData[0].value,
+      genre: "",
       colorType: colorTypeData[0].value,
       framesNumber: 0,
     });
@@ -203,11 +203,11 @@ const NewSceneButton = () => {
               }
               multiline
               variant="outlined"
-              rows={4}
+              rows={6}
               placeholder="A knight is walking in a dense medival forest"
               InputProps={{
                 sx: {
-                  height: "100px",
+                  // height: "100px",
                   borderRadius: "12px",
                   marginTop: 1,
                   fontSize: "14px",

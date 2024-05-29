@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Grid from "@mui/material/Grid";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
@@ -7,7 +7,9 @@ import {
   Box,
   Button,
   IconButton,
+  MenuItem,
   Modal,
+  Popover,
   Skeleton,
   Slider,
 } from "@mui/material";
@@ -15,9 +17,10 @@ import { styled } from "@mui/system";
 import LeftArrowIcon from "../Assets/Images/arrow-left-white.png";
 import RighttArrowIcon from "../Assets/Images/arrow-right-white.png";
 import DownloadIcon from "../Assets/Images/download-circle.png";
+import EditViewIcon from "../Assets/Images/Edit.png";
+import DeleteIcon from "../Assets/Images/delete.png";
 import MoveIcon from "../Assets/Images/nine-dot.png";
 import EditIcon from "../Assets/Images/pencil.png";
-import DeleteIcon from "../Assets/Images/delete.png";
 import HeaderFrame from "./HeaderFrame";
 import DrawIcon from "../Assets/Images/draw.png";
 import EraseIcon from "../Assets/Images/erase.png";
@@ -29,7 +32,7 @@ import FrameFooterPanel from "./FrameFooterPanel";
 import { useFrame } from "../hooks/useFrame";
 import { downloadImage } from "../utils/downloadImage";
 import FrameEditMainComponent from "./FrameEditMainComponent";
-import { Close } from "@mui/icons-material";
+import { Close, MoreVertOutlined } from "@mui/icons-material";
 // Styled components for overlay and circle button
 const Overlay = styled("div")({
   position: "absolute",
@@ -74,8 +77,8 @@ const LeftButtonContainer = styled("div")({
   alignItems: "flex-start",
   position: "absolute",
   left: "10px",
-  top: "50%",
-  transform: "translateY(-50%)",
+  top: "5%",
+  // transform: "translateY(-50%)",
 });
 
 const RightButtonContainer = styled("div")({
@@ -84,8 +87,8 @@ const RightButtonContainer = styled("div")({
   alignItems: "flex-end",
   position: "absolute",
   right: "10px",
-  top: "50%",
-  transform: "translateY(-50%)",
+  top: "5%",
+  // transform: "translateY(-50%)",
 });
 
 const modalStyle = {
@@ -117,6 +120,7 @@ const FramesGrid = ({ sceneData }) => {
   const imageCanvasRef = useRef(null);
   const drawingCanvasRef = useRef(null);
   const { frameData, generationCompleted, generatedFramesNumber } = useFrame();
+  const [selectedFrameUrl, setSelectedFrameUrl] = useState(0);
 
   const setDraw = () => {
     const drawingCanvas = drawingCanvasRef.current;
@@ -129,7 +133,8 @@ const FramesGrid = ({ sceneData }) => {
   };
   const handleOpen = (index) => {
     setSelectedFrame(index);
-    setOpen(true);
+    setSelectedFrameUrl(frameData[index]?.activeUrl)
+    // setOpen(true);
   };
 
   const handleClose = () => {
@@ -151,6 +156,23 @@ const FramesGrid = ({ sceneData }) => {
   const closeEditBar=()=>{
     setEditBar(false)
   }
+  const [anchorEl, setAnchorEl] = useState(null);
+
+  const handleMenuClick = (event) => {
+    // event.stopPropagation();
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleCloseMenu = (e) => {
+    // e.stopPropagation();
+    setAnchorEl(null);
+  };
+
+  const openMenu = Boolean(anchorEl);
+  const id = open ? "simple-popover" : undefined;
+  // useEffect(()=>{
+  //   setSelectedFrameUrl(frameData[selectedFrame]?.activeUrl);
+  // },[frameData,selectedFrame])
   return (
     <div>
       <Grid
@@ -171,7 +193,7 @@ const FramesGrid = ({ sceneData }) => {
                   border: "1px solid #F1F1F1",
                   cursor: "pointer",
                 }}
-                onClick={() => handleOpen(index)}
+                // onClick={() => handleOpen(index)}
               >
                 <CardContent sx={{ position: "relative" }}>
                   <div
@@ -203,7 +225,7 @@ const FramesGrid = ({ sceneData }) => {
                             style={{ width: "20px", height: "20px" }}
                           />
                         </CircleButton>
-                        <CircleButton
+                        {/* <CircleButton
                           onClick={(e) => {
                             e.stopPropagation();
                           }}
@@ -216,8 +238,8 @@ const FramesGrid = ({ sceneData }) => {
                             src={LeftArrowIcon}
                             style={{ width: "20px", height: "20px" }}
                           />
-                        </CircleButton>
-                        <CircleButton
+                        </CircleButton> */}
+                        {/* <CircleButton
                           onClick={(e) => {
                             e.stopPropagation();
                             downloadImage(frame.framesUrl[0], frame.colorType);
@@ -228,16 +250,16 @@ const FramesGrid = ({ sceneData }) => {
                             src={DownloadIcon}
                             style={{ width: "20px", height: "20px" }}
                           />
-                        </CircleButton>
+                        </CircleButton> */}
                       </LeftButtonContainer>
                       <RightButtonContainer>
-                        <CircleButton>
-                          <img
-                            src={EditIcon}
-                            style={{ width: "20px", height: "20px" }}
-                          />
+                        <CircleButton onClick={(e)=>{
+                          handleMenuClick(e)
+                          handleOpen(index)
+                          }}>
+                          <MoreVertOutlined/>
                         </CircleButton>
-                        <CircleButton
+                        {/* <CircleButton
                           onClick={(e) => {
                             e.stopPropagation();
                           }}
@@ -261,11 +283,11 @@ const FramesGrid = ({ sceneData }) => {
                             src={DeleteIcon}
                             style={{ width: "20px", height: "20px" }}
                           />
-                        </CircleButton>
+                        </CircleButton> */}
                       </RightButtonContainer>
                     </Overlay>
                   </div>
-                  <Box
+                  {/* <Box
                     sx={{
                       mt: 1,
                       backgroundColor: "white",
@@ -301,7 +323,7 @@ const FramesGrid = ({ sceneData }) => {
                     >
                       {frame.prompt}
                     </Typography>
-                  </Box>
+                  </Box> */}
                 </CardContent>
               </Card>
             </Grid>
@@ -332,7 +354,7 @@ const FramesGrid = ({ sceneData }) => {
                     height={250}
                   />
 
-                  <Box
+                  {/* <Box
                     sx={{
                       mt: 1,
                       backgroundColor: "white",
@@ -359,7 +381,7 @@ const FramesGrid = ({ sceneData }) => {
                       width={"100%"}
                       height={54}
                     />
-                  </Box>
+                  </Box> */}
                 </CardContent>
               </Card>
             </Grid>
@@ -399,6 +421,8 @@ const FramesGrid = ({ sceneData }) => {
                   brushSize={brushSize}
                   drawingCanvasRef={drawingCanvasRef}
                   imageCanvasRef={imageCanvasRef}
+                  selectedFrameUrl={selectedFrameUrl}
+                  setSelectedFrameUrl={setSelectedFrameUrl}
                 />
                 {/* edit bar */}
                 <Box sx={{ width: "20%" }}>
@@ -508,7 +532,7 @@ const FramesGrid = ({ sceneData }) => {
                             />
                           </Button>
                         </Box>
-                        <FrameEditMainComponent frameData={frameData} selectedFrame={selectedFrame} closeEditBar={closeEditBar}/>
+                        <FrameEditMainComponent frameData={frameData} selectedFrame={selectedFrame} closeEditBar={closeEditBar} setSelectedFrameUrl={setSelectedFrameUrl}/>
                       </Box>
                       {isSettingOpen && (
                         <Box sx={{ position: "relative" }}>
@@ -593,6 +617,81 @@ const FramesGrid = ({ sceneData }) => {
           }
         </Box>
       </Modal>
+      <Popover
+        id={id}
+        open={openMenu}
+        anchorEl={anchorEl}
+        onClose={handleCloseMenu}
+        anchorOrigin={{
+          vertical: "bottom",
+          horizontal: "right",
+        }}
+        transformOrigin={{
+          vertical: "top",
+          horizontal: "right",
+        }}
+        PaperProps={{
+          sx: {
+            width: "144px",
+            borderRadius: "8px",
+          },
+        }}
+      >
+        <MenuItem
+          onClick={()=>{
+            setOpen(true)
+            handleCloseMenu()
+          }}
+          sx={{
+            display: "flex",
+            justifyContent: "space-between",
+            fontSize: "14px",
+            color: "greys.darkest",
+          }}
+        >
+          Edit
+          <img
+            src={EditViewIcon}
+            alt="Edit Icon"
+            style={{ width: "15px", height: "15px" }}
+          />
+        </MenuItem>
+        <MenuItem
+          onClick={()=>{
+            downloadImage(frameData[selectedFrame].framesUrl[selectedFrameUrl], frameData[selectedFrame].colorType);
+            handleCloseMenu();
+          }}
+          sx={{
+            display: "flex",
+            justifyContent: "space-between",
+            fontSize: "14px",
+            color: "greys.darkest",
+          }}
+        >
+          Download
+          <img
+            src={DownloadIcon}
+            alt="Download Icon"
+            style={{ width: "15px", height: "15px" }}
+          />
+        </MenuItem>
+        <MenuItem
+          onClick={handleCloseMenu}
+          sx={{
+            display: "flex",
+            justifyContent: "space-between",
+            fontSize: "14px",
+            color: "greys.darkest",
+          }}
+        >
+          Delete
+          <img
+            src={DeleteIcon}
+            alt="Delete Icon"
+            style={{ width: "15px", height: "15px" }}
+          />
+        </MenuItem>
+      </Popover>
     </div>
   );
 };

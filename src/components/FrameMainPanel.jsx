@@ -5,6 +5,7 @@ import EditIcon from "../Assets/Images/pencil.png";
 import DeleteIcon from "../Assets/Images/delete.png";
 import DownloadIcon from "../Assets/Images/download-circle.png";
 import { useEffect, useState } from "react";
+import { useFrame } from "../hooks/useFrame";
 
 const FrameMainPanel = ({
   framesData,
@@ -18,10 +19,12 @@ const FrameMainPanel = ({
   brushSize,
   drawingCanvasRef,
   imageCanvasRef,
+  selectedFrameUrl,
+  setSelectedFrameUrl
 }) => {
+  const {setActiveFrame}=useFrame()
   const theme = useTheme();
   const [canvasWH, setCanvasWidthHeight] = useState({ width: 0, height: 0 });
-  const [selectedFrameUrl, setSelectedFrameUrl] = useState(0);
   const aspectRatioForImages = "1:1";
   const mainPanelStyle = {
     width: "50%",
@@ -45,67 +48,6 @@ const FrameMainPanel = ({
   };
 
   const [lastPos, setLastPos] = useState({ x: 0, y: 0 });
-
-  useEffect(() => {
-    const imageCanvas = imageCanvasRef.current;
-    const drawingCanvas = drawingCanvasRef.current;
-    const ctx = imageCanvas.getContext("2d");
-    const img = new Image();
-    img.crossOrigin = "anonymous";
-    img.src =
-      framesData[selectedFrame]?.framesUrl[selectedFrameUrl] +
-      "?not-from-cache-please";
-
-    img.onload = () => {
-      let canvasWidth;
-      if (aspectRatioForImages === "16:9") {
-        canvasWidth = 750;
-      } else if (aspectRatioForImages === "9:16") {
-        canvasWidth = 420;
-      } else if (aspectRatioForImages === "4:3") {
-        canvasWidth = 500;
-      } else if (aspectRatioForImages === "3:2") {
-        canvasWidth = 550;
-      } else if (aspectRatioForImages === "1:1") {
-        canvasWidth = 400;
-      } else {
-        canvasWidth = imageCanvas.parentElement.clientWidth;
-      }
-      const aspectRatio = img.width / img.height;
-      const canvasHeight = canvasWidth / aspectRatio;
-      setCanvasWidthHeight({ width: canvasWidth, height: canvasHeight });
-
-      imageCanvas.width = canvasWidth;
-      imageCanvas.height = canvasHeight;
-      drawingCanvas.width = canvasWidth;
-      drawingCanvas.height = canvasHeight;
-
-      ctx.drawImage(img, 0, 0, canvasWidth, canvasHeight);
-    };
-
-    img.onerror = () => {
-      console.error("Error loading image:", img.src);
-    };
-
-    const resizeCanvases = () => {
-      if (img.complete) {
-        img.onload();
-      }
-    };
-
-    window.addEventListener("resize", resizeCanvases);
-
-    return () => {
-      window.removeEventListener("resize", resizeCanvases);
-    };
-  }, [
-    framesData,
-    selectedFrame,
-    drawingCanvasRef,
-    imageCanvasRef,
-    aspectRatioForImages,
-    selectedFrameUrl,
-  ]);
 
   const startDrawing = (e) => {
     const { offsetX, offsetY } = e.nativeEvent;
@@ -132,69 +74,76 @@ const FrameMainPanel = ({
   const stopDrawing = () => {
     setIsDrawing(false);
   };
+
+  const handleSetActive=async()=>{
+    await setActiveFrame({frame_id:framesData[selectedFrame]._id,active_id:selectedFrameUrl})
+  }
+
+  useEffect(() => {
+    console.log(framesData,"framesData");
+    console.log("useEffect called",selectedFrameUrl,selectedFrame);
+  const imageCanvas = imageCanvasRef.current;
+  const drawingCanvas = drawingCanvasRef.current;
+  const ctx = imageCanvas.getContext("2d");
+  const img = new Image();
+  img.crossOrigin = "anonymous";
+  img.src =
+    framesData[selectedFrame]?.framesUrl[selectedFrameUrl] +
+    "?not-from-cache-please";
+
+  img.onload = () => {
+    let canvasWidth;
+    if (aspectRatioForImages === "16:9") {
+      canvasWidth = 750;
+    } else if (aspectRatioForImages === "9:16") {
+      canvasWidth = 420;
+    } else if (aspectRatioForImages === "4:3") {
+      canvasWidth = 500;
+    } else if (aspectRatioForImages === "3:2") {
+      canvasWidth = 550;
+    } else if (aspectRatioForImages === "1:1") {
+      canvasWidth = 400;
+    } else {
+      canvasWidth = imageCanvas.parentElement.clientWidth;
+    }
+    const aspectRatio = img.width / img.height;
+    const canvasHeight = canvasWidth / aspectRatio;
+    setCanvasWidthHeight({ width: canvasWidth, height: canvasHeight });
+
+    imageCanvas.width = canvasWidth;
+    imageCanvas.height = canvasHeight;
+    drawingCanvas.width = canvasWidth;
+    drawingCanvas.height = canvasHeight;
+
+    ctx.drawImage(img, 0, 0, canvasWidth, canvasHeight);
+  };
+
+  img.onerror = () => {
+    console.error("Error loading image:", img.src);
+  };
+
+  const resizeCanvases = () => {
+    if (img.complete) {
+      img.onload();
+    }
+  };
+
+  window.addEventListener("resize", resizeCanvases);
+
+  return () => {
+    window.removeEventListener("resize", resizeCanvases);
+  };
+  }, [
+  framesData,
+  selectedFrame,
+  drawingCanvasRef,
+  imageCanvasRef,
+  aspectRatioForImages,
+  selectedFrameUrl,
+  ]);
   return (
     <Box sx={mainPanelStyle}>
       <Box sx={{ position: "relative", marginTop: "10px" }}>
-        <Button
-          variant="contained"
-          onClick={() => {
-            selectedFrame > 0 ? setSelectedFrame(selectedFrame - 1) : null;
-            setSelectedFrameUrl(0);
-          }}
-          sx={{
-            position: "absolute",
-            left: "0",
-            top: "50%",
-            bgcolor: "white",
-            color: selectedFrame > 0 ? "black" : "greys.light",
-            "&:hover": { bgcolor: "white" },
-          }}
-        >
-          {/* <ArrowLeftIcon /> */}
-          <img
-            src={LeftArrowIcon}
-            style={{
-              width: "20px",
-              height: "20px",
-              filter: selectedFrame > 0 ? "invert(100%)" : "invert(50%)",
-            }}
-          />
-          &nbsp;Back
-        </Button>
-
-        {/* Next button with right arrow */}
-        <Button
-          variant="contained"
-          onClick={() => {
-            selectedFrame < framesData.length - 1
-              ? setSelectedFrame(selectedFrame + 1)
-              : null;
-            setSelectedFrameUrl(0);
-          }}
-          sx={{
-            position: "absolute",
-            right: "0",
-            top: "50%",
-            bgcolor: "white",
-            color:
-              selectedFrame < framesData.length - 1 ? "black" : "greys.light",
-            "&:hover": { bgcolor: "white" },
-          }}
-        >
-          Next
-          <img
-            src={RighttArrowIcon}
-            style={{
-              width: "20px",
-              height: "20px",
-              filter:
-                selectedFrame < framesData.length - 1
-                  ? "invert(100%)"
-                  : "invert(50%)",
-            }}
-          />
-          {/* <ArrowRightIcon /> */}
-        </Button>
 
         {/* Current frame / total frame display */}
         <Typography
@@ -215,11 +164,75 @@ const FrameMainPanel = ({
         sx={{
           position: "relative",
           marginTop: "40px",
-          width: "fit-content",
+          width: "100%",
           height: "fit-content",
           marginX: "auto",
+          display:"flex",
+          alignItems:"center",
+          justifyContent:"center"
         }}
       >
+         <Button
+          variant="contained"
+          disabled={selectedFrame===0}
+          onClick={() => {
+            selectedFrame > 0 ? setSelectedFrame(selectedFrame - 1) : null;
+            setSelectedFrameUrl(framesData[selectedFrame-1].activeUrl);
+          }}
+          sx={{
+            position: "absolute",
+            left: "0",
+            top: "50%",
+            bgcolor: "white",
+            color: selectedFrame > 0 ? "black" : "greys.light",
+            "&:hover": { bgcolor: "white" },
+          }}
+        >
+          {/* <ArrowLeftIcon /> */}
+          <img
+            src={LeftArrowIcon}
+            style={{
+              width: "20px",
+              height: "20px",
+              filter: selectedFrame > 0 ? "invert(100%)" : "invert(50%)",
+            }}
+          />
+        </Button>
+
+        {/* Next button with right arrow */}
+        <Button
+          variant="contained"
+          disabled={selectedFrame === framesData.length - 1}
+          onClick={() => {
+            selectedFrame < framesData.length - 1
+              ? setSelectedFrame(selectedFrame + 1)
+              : null;
+            setSelectedFrameUrl(framesData[selectedFrame+1].activeUrl);
+
+          }}
+          sx={{
+            position: "absolute",
+            right: "0",
+            top: "50%",
+            bgcolor: "white",
+            color:
+              selectedFrame < framesData.length - 1 ? "black" : "greys.light",
+            "&:hover": { bgcolor: "white" },
+          }}
+        >
+          <img
+            src={RighttArrowIcon}
+            style={{
+              width: "20px",
+              height: "20px",
+              filter:
+                selectedFrame < framesData.length - 1
+                  ? "invert(100%)"
+                  : "invert(50%)",
+            }}
+          />
+          {/* <ArrowRightIcon /> */}
+        </Button>
         <div
           style={{
             position: "relative",
@@ -262,7 +275,6 @@ const FrameMainPanel = ({
               })`,
             }}
           /> */}
-        </div>
         <Box
           sx={{
             display: isEditBarOpen ? "none" : "block",
@@ -281,19 +293,19 @@ const FrameMainPanel = ({
           }}
         >
           <Button
-            // onClick={handleSetActive}
+            onClick={handleSetActive}
             sx={{
               position: "absolute",
               top: "10px",
               left: "10px",
-              bgcolor: "white",
-              color: "black",
+              bgcolor: selectedFrameUrl===framesData[selectedFrame]?.activeUrl?"white":"transparent",
+              color: selectedFrameUrl===framesData[selectedFrame]?.activeUrl?"black":"white",
               borderRadius: "16px",
               fontSize: "14px",
-              "&:hover": { bgcolor: "white" },
+              ":hover": { bgcolor: "white",color:"black" },
             }}
           >
-            Set as Active
+            {selectedFrameUrl===framesData[selectedFrame]?.activeUrl?"Active":"Set as Active"}
           </Button>
 
           <Box
@@ -456,6 +468,7 @@ const FrameMainPanel = ({
             ))}
           </Box>
         </Box>
+        </div>
       </Box>
 
       <Box

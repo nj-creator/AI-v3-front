@@ -43,7 +43,7 @@ const reducer = createSlice({
     setGenerationCompleted: (state) => {
       state.generationCompleted = true;
     },
-    setRegeneratedFrame: (state,action)=>{
+    setFramesData: (state,action)=>{
       state.data=action.payload
     }
   },
