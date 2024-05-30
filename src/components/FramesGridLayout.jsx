@@ -33,6 +33,7 @@ import { useFrame } from "../hooks/useFrame";
 import { downloadImage } from "../utils/downloadImage";
 import FrameEditMainComponent from "./FrameEditMainComponent";
 import { Close, MoreVertOutlined } from "@mui/icons-material";
+import GenerateFrameMain from "./GenerateFrameMain";
 // Styled components for overlay and circle button
 const Overlay = styled("div")({
   position: "absolute",
@@ -156,6 +157,9 @@ const FramesGrid = ({ sceneData }) => {
 
   const closeEditBar=()=>{
     setEditBar(false)
+  }
+  const closeGenerateFrame=()=>{
+    setRegenerateScene(false)
   }
   const [anchorEl, setAnchorEl] = useState(null);
 
@@ -424,9 +428,47 @@ const FramesGrid = ({ sceneData }) => {
                   imageCanvasRef={imageCanvasRef}
                   selectedFrameUrl={selectedFrameUrl}
                   setSelectedFrameUrl={setSelectedFrameUrl}
+                  isRegenerateScene={isRegenerateScene}
                 />
                 {/* edit bar */}
                 <Box sx={{ width: "20%" }}>
+                  {
+                    isRegenerateScene && (
+                      <Box
+                        sx={{
+                          bgcolor: "white",
+                          borderRadius: "12px",
+                          p: 2,
+                        }}
+                      >
+                        <Box
+                          sx={{
+                            display: "flex",
+                            justifyContent: "space-between",
+                            alignItems: "center",
+                            mb: 2,
+                          }}
+                        >
+                          <Typography
+                            sx={{
+                              fontSize: "14px",
+                              fontWeight: "500",
+                              color: "secondary.dark",
+                            }}
+                          >
+                            Generate Frame
+                          </Typography>
+                          <IconButton
+                            onClick={closeGenerateFrame}
+                            sx={{ top: "-10px" }}
+                          >
+                            <Close />
+                          </IconButton>
+                        </Box>
+                        <GenerateFrameMain closeGenerateFrame={closeGenerateFrame} selectedFrame={selectedFrame}/>
+                      </Box>
+                    )
+                  }
                   {isEditBarOpen && (
                     <>
                       <Box

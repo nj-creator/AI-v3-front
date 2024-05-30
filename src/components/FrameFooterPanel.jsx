@@ -1,4 +1,5 @@
-import { Box } from "@mui/material";
+import { Close } from "@mui/icons-material";
+import { Box, IconButton } from "@mui/material";
 import { useTheme } from "@mui/system"; // Import the useTheme hook
 
 const FrameFooterPanel = ({ framesData, selectedFrame, setSelectedFrame,setRegenerateScene,isRegenerateScene }) => {
@@ -53,9 +54,10 @@ const FrameFooterPanel = ({ framesData, selectedFrame, setSelectedFrame,setRegen
                 padding: "2px",
                 border: isActive && !isRegenerateScene
                   ? `3px solid ${theme.palette.primary.main}`
-                  : "none", // Conditional border
+                  : "none", // Conditional border,
+                opacity:isRegenerateScene?".5":"1"
               }}
-              onClick={() => handleImageClick(index)}
+              onClick={() => isRegenerateScene?null:handleImageClick(index)}
             />
           );
         })}
@@ -63,15 +65,20 @@ const FrameFooterPanel = ({ framesData, selectedFrame, setSelectedFrame,setRegen
           isRegenerateScene && 
           <Box sx={{
             width: "80px",
-                height: "80px",
-                borderRadius: "8px",
-                cursor: "pointer",
-                padding: "2px",
-                backgroundColor: "greys.lighter",
-                border: isRegenerateScene
-                  ? `3px solid ${theme.palette.primary.main}`
-                  : "none"
-          }}/>
+            height: "80px",
+            borderRadius: "8px",
+            cursor: "pointer",
+            padding: "2px",
+            backgroundColor: "greys.lighter",
+            border: isRegenerateScene
+              ? `3px solid ${theme.palette.primary.main}`
+              : "none",
+            display:"flex",
+            alignItems:"center",
+            justifyContent:"center"
+          }}>
+            <IconButton onClick={()=>setRegenerateScene(false)}><Close fontSize="small"/></IconButton>
+          </Box>
         }
         <Box
         onClick={handleRegenerateScene}

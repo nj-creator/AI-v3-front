@@ -110,10 +110,10 @@ export const inpaintingTypeData = [
   //   title: "Remove object",
   //   value: "REMOVE_OBJECT",
   // },
-  // {
-  //   title: "Change background",
-  //   value: "CHANGE_BACKGROUND",
-  // },
+  {
+    title: "Change background",
+    value: "CHANGE_BACKGROUND",
+  },
   {
     title: "Change weather",
     value: "CHANGE_WEATHER",

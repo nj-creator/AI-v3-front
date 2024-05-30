@@ -19,14 +19,14 @@ import { useState } from "react";
 import {
   cameraAngleData,
   colorTypeData,
-  inpaintingTypeData,
   shotTypeData,
   stylesData,
 } from "../Data/dropdownData";
 import { useFrame } from "../hooks/useFrame";
 import { LoadingButton } from "@mui/lab";
+import { postData } from "../utils/serverHelper";
 
-const FrameEditMainComponent = ({ frameData, selectedFrame, closeEditBar,setSelectedFrameUrl }) => {
+const GenerateFrameMain = ({ selectedFrame, closeGenerateFrame }) => {
   const { updateRegeneratedFrame } = useFrame();
   const [loading, setLoading] = useState(false);
   const [requestData, setRequestData] = useState({
@@ -35,22 +35,16 @@ const FrameEditMainComponent = ({ frameData, selectedFrame, closeEditBar,setSele
     style: stylesData[0].value,
     colorType: colorTypeData[0].value,
     shotType: shotTypeData[0].value,
-    inpaintingType: "",
   });
 
   const handleGenerateClick = async () => {
     setLoading(true);
-    var image = document.getElementById("imageCanvas");
-    var mask = document.getElementById("drawingCanvas");
-    const formData = new FormData();
-    formData.append("maskImage", mask.toDataURL("image/png"));
-    formData.append("baseImage", image.toDataURL("image/jpeg"));
-    formData.append("prompt", requestData.description);
-    formData.append("height", image.height);
-    formData.append("width", image.width);
-    formData.append("inpainting_action", requestData.inpaintingType);
-    formData.append("frame_id", frameData[selectedFrame]._id);
-    await updateRegeneratedFrame(formData,selectedFrame,closeEditBar,setLoading,setSelectedFrameUrl);
+    try {
+        await postData("/frame/regenerate_scene",{data:requestData.description})
+        setLoading(false);
+    } catch (error) {
+        setLoading(false);
+    }
   };
 
   const dropdownData = [
@@ -82,7 +76,7 @@ const FrameEditMainComponent = ({ frameData, selectedFrame, closeEditBar,setSele
 
   return (
     <Box>
-      <Box>
+      {/* <Box>
         <Box
           sx={{
             display: "flex",
@@ -114,6 +108,13 @@ const FrameEditMainComponent = ({ frameData, selectedFrame, closeEditBar,setSele
               }))
             }
             displayEmpty
+            renderValue={(selected) => {
+            if (selected.length === 0) {
+              return <em>Select</em>;
+            }
+
+            return selected;
+          }}
             placeholder="select"
             InputProps={{
               style: {
@@ -141,7 +142,6 @@ const FrameEditMainComponent = ({ frameData, selectedFrame, closeEditBar,setSele
             }}
             IconComponent={KeyboardArrowDown}
           >
-            <MenuItem value="">Select</MenuItem>
             {inpaintingTypeData.map((item, idx) => (
               <MenuItem key={idx} value={item.value}>
                 {item.title}
@@ -152,10 +152,10 @@ const FrameEditMainComponent = ({ frameData, selectedFrame, closeEditBar,setSele
         <Box sx={{ display: "flex", justifyContent: "center", width: "100%" }}>
           <Divider sx={{ backgroundColor: "#F1F1F1", width: "100%" }} />
         </Box>
-      </Box>
+      </Box> */}
 
       <Box>
-        <Box sx={{ py: 2 }}>
+        <Box sx={{ py: 1 }}>
           <Typography
             sx={{
               fontSize: "14px",
@@ -171,7 +171,7 @@ const FrameEditMainComponent = ({ frameData, selectedFrame, closeEditBar,setSele
               alt="Icon1"
               style={{ marginRight: "8px", width: "16px" }}
             />
-            Description
+            Frame Description
           </Typography>
           <TextField
             fullWidth
@@ -201,8 +201,6 @@ const FrameEditMainComponent = ({ frameData, selectedFrame, closeEditBar,setSele
             }}
           />
         </Box>
-
-        <Divider sx={{ backgroundColor: "#F1F1F1", width: "100%" }} />
       </Box>
 
       {dropdownData.map((dropdown, index) => (
@@ -287,7 +285,7 @@ const FrameEditMainComponent = ({ frameData, selectedFrame, closeEditBar,setSele
         }}
       >
         <LoadingButton
-          disabled={(requestData.description === "") || (requestData.inpaintingType === "")}
+          disabled={(requestData.description === "")}
           onClick={handleGenerateClick}
           variant="contained"
           color="primary"
@@ -304,4 +302,4 @@ const FrameEditMainComponent = ({ frameData, selectedFrame, closeEditBar,setSele
   );
 };
 
-export default FrameEditMainComponent;
+export default GenerateFrameMain;
