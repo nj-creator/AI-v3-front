@@ -1,19 +1,23 @@
 import { Box } from "@mui/material";
 import { useTheme } from "@mui/system"; // Import the useTheme hook
 
-const FrameFooterPanel = ({ framesData, selectedFrame, setSelectedFrame }) => {
+const FrameFooterPanel = ({ framesData, selectedFrame, setSelectedFrame,setRegenerateScene,isRegenerateScene }) => {
   const theme = useTheme(); // Get the theme
 
   // Calculate the start index based on the selectedFrame index
   const startIndex = Math.min(framesData.length - 3, selectedFrame);
   // Slice the framesData array to get the images starting from startIndex to startIndex + 3
-  const visibleFrames = framesData.slice(startIndex, startIndex + 3);
+  const visibleFrames = framesData.slice((isRegenerateScene?framesData.length-2:startIndex), (isRegenerateScene?framesData.length:startIndex + 3));
 
   const handleImageClick = (index) => {
     // Update the selected frame index based on the clicked image index
     setSelectedFrame(startIndex + index);
+    setRegenerateScene(false);
   };
 
+  const handleRegenerateScene=()=>{
+    setRegenerateScene(true);
+  }
   return (
     <Box
       sx={{
@@ -35,7 +39,7 @@ const FrameFooterPanel = ({ framesData, selectedFrame, setSelectedFrame }) => {
           return (
             <img
               key={index}
-              src={frame.framesUrl[0]}
+              src={frame.framesUrl[frame.activeUrl]}
               alt={`Image ${index + 1}`}
               style={{
                 filter: `grayscale(${
@@ -47,7 +51,7 @@ const FrameFooterPanel = ({ framesData, selectedFrame, setSelectedFrame }) => {
                 borderRadius: "8px",
                 cursor: "pointer", // Add cursor pointer
                 padding: "2px",
-                border: isActive
+                border: isActive && !isRegenerateScene
                   ? `3px solid ${theme.palette.primary.main}`
                   : "none", // Conditional border
               }}
@@ -55,7 +59,22 @@ const FrameFooterPanel = ({ framesData, selectedFrame, setSelectedFrame }) => {
             />
           );
         })}
+        {
+          isRegenerateScene && 
+          <Box sx={{
+            width: "80px",
+                height: "80px",
+                borderRadius: "8px",
+                cursor: "pointer",
+                padding: "2px",
+                backgroundColor: "greys.lighter",
+                border: isRegenerateScene
+                  ? `3px solid ${theme.palette.primary.main}`
+                  : "none"
+          }}/>
+        }
         <Box
+        onClick={handleRegenerateScene}
           sx={{
             width: "80px",
             height: "80px",

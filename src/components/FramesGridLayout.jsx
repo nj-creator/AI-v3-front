@@ -121,6 +121,7 @@ const FramesGrid = ({ sceneData }) => {
   const drawingCanvasRef = useRef(null);
   const { frameData, generationCompleted, generatedFramesNumber } = useFrame();
   const [selectedFrameUrl, setSelectedFrameUrl] = useState(0);
+  const [isRegenerateScene, setRegenerateScene] = useState(false);
 
   const setDraw = () => {
     const drawingCanvas = drawingCanvasRef.current;
@@ -209,7 +210,7 @@ const FramesGrid = ({ sceneData }) => {
                     }}
                   >
                     <img
-                      src={frame.framesUrl[0]}
+                      src={frame.framesUrl[frame.activeUrl]}
                       alt={frame["project name"]}
                       style={{
                         width: "100%",
@@ -611,6 +612,8 @@ const FramesGrid = ({ sceneData }) => {
                   framesData={frameData}
                   selectedFrame={selectedFrame}
                   setSelectedFrame={setSelectedFrame}
+                  isRegenerateScene={isRegenerateScene}
+                  setRegenerateScene={setRegenerateScene}
                 />
               </Box>
             </>

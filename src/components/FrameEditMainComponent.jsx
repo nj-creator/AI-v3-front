@@ -35,7 +35,7 @@ const FrameEditMainComponent = ({ frameData, selectedFrame, closeEditBar,setSele
     style: stylesData[0].value,
     colorType: colorTypeData[0].value,
     shotType: shotTypeData[0].value,
-    inpaintingType: inpaintingTypeData[0].value,
+    inpaintingType: "",
   });
 
   const handleGenerateClick = async () => {
@@ -113,6 +113,15 @@ const FrameEditMainComponent = ({ frameData, selectedFrame, closeEditBar,setSele
                 inpaintingType: e.target.value,
               }))
             }
+            displayEmpty
+            renderValue={(selected) => {
+            if (selected.length === 0) {
+              return <em>Select</em>;
+            }
+
+            return selected;
+          }}
+            placeholder="select"
             InputProps={{
               style: {
                 padding: "0px",
@@ -284,7 +293,7 @@ const FrameEditMainComponent = ({ frameData, selectedFrame, closeEditBar,setSele
         }}
       >
         <LoadingButton
-          disabled={requestData.description === ""}
+          disabled={(requestData.description === "") || (requestData.inpaintingType === "")}
           onClick={handleGenerateClick}
           variant="contained"
           color="primary"
