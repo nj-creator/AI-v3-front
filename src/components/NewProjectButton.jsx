@@ -15,6 +15,7 @@ import { useProject } from "../hooks/useProject";
 import { LoadingButton } from "@mui/lab";
 import { Save } from "@mui/icons-material";
 import { aspectRatioData, stylesData } from "../Data/dropdownData";
+import { useNavigate } from "react-router-dom";
 
 const style = {
   position: "absolute",
@@ -31,6 +32,7 @@ const style = {
 
 const NewProjectButton = () => {
   const [open, setOpen] = React.useState(false);
+  const navigate=useNavigate();
   const handleOpen = () => setOpen(true);
   const handleClose = () => {
     setOpen(false);
@@ -261,7 +263,7 @@ const NewProjectButton = () => {
           >
             <LoadingButton
               disabled={Object.values(formData).some((value) => value === "")}
-              onClick={() => createProject(formData, handleClose)}
+              onClick={() => createProject(formData, handleClose, navigate)}
               variant="contained"
               color="primary"
               fullWidth

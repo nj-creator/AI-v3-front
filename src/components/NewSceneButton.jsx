@@ -26,6 +26,7 @@ import { Save } from "@mui/icons-material";
 import { useScene } from "../hooks/useScene";
 import { useParams } from "react-router-dom";
 import { colorTypeData, genreData } from "../Data/dropdownData";
+import { useSelector } from "react-redux";
 const style = {
   position: "absolute",
   top: "50%",
@@ -40,12 +41,14 @@ const style = {
 };
 
 const NewSceneButton = () => {
+  const projectScenes=useSelector(state=>state.scene.data)
+  console.log(projectScenes);
   const [open, setOpen] = React.useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => {
     setOpen(false);
     setFormData({
-      title: "",
+      title: `Scene ${projectScenes?.length+1}`,
       script: "",
       location: "",
       genre: "",
@@ -64,10 +67,10 @@ const NewSceneButton = () => {
   }, [isError]);
 
   const [formData, setFormData] = useState({
-    title: "",
+    title: `Scene ${projectScenes?.length+1}`,
     script: "",
     location: "",
-    genre: genreData[0].value,
+    genre: "",
     colorType: colorTypeData[0].value,
     framesNumber: 0,
   });
@@ -88,6 +91,9 @@ const NewSceneButton = () => {
       setFormData((prev) => ({ ...prev, framesNumber: prev.framesNumber - 1 }));
     }
   };
+  useEffect(()=>{
+    setFormData({...formData,title:`Scene ${projectScenes?.length+1}`})
+  },[projectScenes])
 
   return (
     <>
@@ -158,6 +164,7 @@ const NewSceneButton = () => {
               fullWidth
               value={formData.title}
               variant="outlined"
+              autoFocus
               onChange={(e) =>
                 setFormData((prev) => ({ ...prev, title: e.target.value }))
               }
@@ -282,6 +289,7 @@ const NewSceneButton = () => {
             <Select
               value={formData.genre}
               onChange={handleGenreChange}
+              displayEmpty
               sx={{
                 fontSize: "14px",
                 fontWeight: "500",
@@ -293,6 +301,7 @@ const NewSceneButton = () => {
                   },
               }}
             >
+              <MenuItem value=""><em>Select</em></MenuItem>
               {genreData.map((item, idx) => (
                 <MenuItem
                   key={idx}

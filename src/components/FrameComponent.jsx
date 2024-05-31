@@ -49,7 +49,7 @@ const FrameComponent = ({ asset, setAsset }) => {
 
   return (
     <Box sx={{ marginBottom: 2, marginTop: 3, marginLeft: 3 }}>
-      <Box
+      {/* <Box
         sx={{
           display: "flex",
           alignItems: "center",
@@ -60,14 +60,11 @@ const FrameComponent = ({ asset, setAsset }) => {
         }}
       >
         <Box sx={{ display: "flex", alignItems: "center" }}>
-          {/* Heading */}
-
           <Typography variant="h5" component="div" style={{ fontSize: "32px" }}>
             {sceneDetails?.title}
           </Typography>
         </Box>
-      </Box>
-
+      </Box> */}
       <FramesGrid sceneData={sceneDetails} />
     </Box>
   );

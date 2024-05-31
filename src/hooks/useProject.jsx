@@ -2,6 +2,7 @@ import { useCallback, useEffect, useMemo } from "react";
 import { useAppDispatch, useAppSelector } from "../store";
 import { projectActions } from "../store/slice/project.reducer";
 import { getData, postData } from "../utils/serverHelper";
+import { createUrlQuery } from "../utils/convertString";
 
 export const useProject = (fetchProjects = false) => {
   const projectState = useAppSelector((state) => state.project);
@@ -34,13 +35,15 @@ export const useProject = (fetchProjects = false) => {
   }, [fetchProjects, getProjects]);
 
   const createProject = useCallback(
-    async (payload, closePopup) => {
+    async (payload, closePopup, navigate) => {
       try {
         dispatch(projectActions.setProjectLoading());
 
-        await postData("/project/create", payload);
+        const data=await postData("/project/create", payload);
         getProjects();
         closePopup();
+        navigate(`/project/${data?.data?._id}?title=${createUrlQuery(data?.data?.name)}`)
+
       } catch (error) {
         dispatch(
           projectActions.setProjectError(

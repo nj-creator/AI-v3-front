@@ -3,20 +3,24 @@ import Toolbar from "@mui/material/Toolbar";
 import SwitchTheme from "./SwitchTheme";
 import ProfileButton from "./ProfileButton";
 
-import { Button } from "@mui/material";
+import { Box, Button, Typography } from "@mui/material";
 import LeftArrow from "../Assets/Images/arrow-left.png";
 
 import NewFrameButton from "./NewFrameButton";
 import ExportAllButton from "./ExportAllButton";
 import { useNavigate } from "react-router-dom";
+import { useSceneDetails } from "../hooks/useScene";
 const HeaderScene = () => {
   const navigate = useNavigate();
+  const { sceneDetails } = useSceneDetails();
+
   return (
     <AppBar
       position="static"
       sx={{ backgroundColor: "transparent", boxShadow: "none", height: 72 }}
     >
       <Toolbar sx={{ justifyContent: "space-between" }}>
+        <Box display={"flex"} gap={3} color={"black"} alignItems={"center"}>
         <Button
           onClick={() => navigate(-1)}
           sx={{
@@ -34,6 +38,10 @@ const HeaderScene = () => {
           />
           Back to Scene
         </Button>
+          <Typography variant="h5" component="div" style={{ fontSize: "20px",textTransform:"capitalize" }}>
+            {sceneDetails?.title}
+          </Typography>
+        </Box>
         <div style={{ display: "flex", alignItems: "center" }}>
           {/* New Project Button */}
 

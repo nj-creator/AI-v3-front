@@ -75,7 +75,7 @@ const ProjectGrid = ({ projectData }) => {
                 style={{ marginTop: "10px", fontSize: "18px" }}
               >
                 <Typography
-                  sx={{ width: "fit-content" }}
+                  sx={{ width: "fit-content",textTransform:"capitalize" }}
                   // onClick={() =>
                   //   navigate(
                   //     `/project/${project._id}?title=${createUrlQuery(
