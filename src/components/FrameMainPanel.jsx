@@ -118,7 +118,7 @@ const FrameMainPanel = ({
         imageCanvas.height = canvasHeight;
         drawingCanvas.width = canvasWidth;
         drawingCanvas.height = canvasHeight;
-
+        ctx.filter = framesData[selectedFrame].colorType === "black&White" ?"grayscale(1)":"grayscale(0)";
         ctx.drawImage(img, 0, 0, canvasWidth, canvasHeight);
       };
 

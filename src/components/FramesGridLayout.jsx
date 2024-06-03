@@ -123,8 +123,11 @@ const FramesGrid = ({ sceneData }) => {
   const { frameData, generationCompleted, generatedFramesNumber } = useFrame();
   const [selectedFrameUrl, setSelectedFrameUrl] = useState(0);
   const [isRegenerateScene, setRegenerateScene] = useState(false);
+  const [eraseButton,setEraseBtnClicked]=useState(false);
 
   const setDraw = () => {
+    setEraseBtnClicked(false)
+    setDrawBtnClicked(true);
     const drawingCanvas = drawingCanvasRef.current;
     const drawingContext = drawingCanvas.getContext("2d");
     drawingContext.globalCompositeOperation = "source-over";
@@ -147,6 +150,7 @@ const FramesGrid = ({ sceneData }) => {
     const drawingCanvas = drawingCanvasRef.current;
     const drawingContext = drawingCanvas.getContext("2d");
     drawingContext.globalCompositeOperation = "destination-out";
+    setEraseBtnClicked(true)
   };
 
   const handleClearCanvas = () => {
@@ -495,7 +499,10 @@ const FramesGrid = ({ sceneData }) => {
                             Edit Image
                           </Typography>
                           <IconButton
-                            onClick={closeEditBar}
+                            onClick={()=>{
+                              handleClearCanvas()
+                              closeEditBar()
+                            }}
                             sx={{ top: "-10px" }}
                           >
                             <Close />
@@ -511,12 +518,9 @@ const FramesGrid = ({ sceneData }) => {
                           }}
                         >
                           <Button
-                            onClick={() => {
-                              setDrawBtnClicked(true);
-                              setDraw();
-                            }}
+                            onClick={setDraw}
                             sx={{
-                              bgcolor: "greys.lighter",
+                              bgcolor: drawButton && !eraseButton?"#e6e3e3":"none",
                               borderRadius: "8px",
                               padding: "8px",
                               width: "fit-content",
@@ -525,13 +529,13 @@ const FramesGrid = ({ sceneData }) => {
                           >
                             <img
                               src={DrawIcon}
-                              style={{ width: "20px", height: "20px" }}
+                              style={{ width: "20px", height: "20px"}}
                             />
                           </Button>
                           <Button
                             onClick={setErase}
                             sx={{
-                              bgcolor: "greys.lighter",
+                              bgcolor: eraseButton?"#e6e3e3":"none",
                               borderRadius: "8px",
                               padding: "8px",
                               width: "fit-content",
@@ -540,13 +544,13 @@ const FramesGrid = ({ sceneData }) => {
                           >
                             <img
                               src={EraseIcon}
-                              style={{ width: "20px", height: "20px" }}
+                              style={{ width: "20px", height: "20px", filter:eraseButton?"grayscale(1)":"grayscale(0)" }}
                             />
                           </Button>
                           <Button
                             onClick={() => setSettingBar(true)}
                             sx={{
-                              bgcolor: "greys.lighter",
+                              bgcolor: isSettingOpen? "#e6e3e3":"none",
                               borderRadius: "8px",
                               padding: "8px",
                               width: "fit-content",
@@ -561,7 +565,7 @@ const FramesGrid = ({ sceneData }) => {
                           <Button
                             onClick={handleClearCanvas}
                             sx={{
-                              bgcolor: "greys.lighter",
+                              // bgcolor: "#e6e3e3",
                               borderRadius: "8px",
                               padding: "8px",
                               width: "fit-content",

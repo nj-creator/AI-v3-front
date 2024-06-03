@@ -73,20 +73,19 @@ export const useFrame = (fetchFrames = false) => {
         }
         return item;
       });
-      await setActiveFrame({frame_id:updatedData[id]._id,active_id:updatedData[id].framesUrl.length-1},setSelectedFrameUrl,updatedData)
+      await setActiveFrame({frame_id:updatedData[id]._id,active_id:updatedData[id].framesUrl.length-1},setSelectedFrameUrl,updatedData,close)
       setLoading(false);
-      close();
+      // close();
     } catch (error) {
       setLoading(false);
       console.log(error,"error while regenerating");
     }
   },[dispatch,frameState])
 
-  const setActiveFrame=useCallback(async(payload,setSelectedFrameUrl,updtData)=>{
+  const setActiveFrame=useCallback(async(payload,setSelectedFrameUrl,updtData,close)=>{
     try {
       if (setSelectedFrameUrl && updtData) {
         const data=await postData("/frame/activeFrame",payload)
-        console.log(payload,"active data res");
         setSelectedFrameUrl(payload.active_id);
         const updatedData=updtData.map((item)=>{
           if (item._id===payload.frame_id) {
@@ -95,9 +94,9 @@ export const useFrame = (fetchFrames = false) => {
           return item;
         })
         dispatch(frameActions.setFramesData(updatedData));
+        close();
       }else{
         const data=await postData("/frame/activeFrame",payload)
-        console.log(payload,"active data res");
         const frames=frameState.data;
         const updatedData=frames.map((item)=>{
           if (item._id===payload.frame_id) {
