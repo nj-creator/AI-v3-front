@@ -14,7 +14,7 @@ import {
 import { useProject } from "../hooks/useProject";
 import { LoadingButton } from "@mui/lab";
 import { Save } from "@mui/icons-material";
-import { aspectRatioData, stylesData } from "../Data/dropdownData";
+import { stylesData } from "../Data/dropdownData";
 import { useNavigate } from "react-router-dom";
 
 const style = {
@@ -23,7 +23,7 @@ const style = {
   left: "50%",
   transform: "translate(-50%, -50%)",
   width: "650px",
-  height: "638px",
+  height: "560px",
   bgcolor: "background.paper",
   borderRadius: "16px",
   boxShadow: 24,
@@ -32,13 +32,13 @@ const style = {
 
 const NewProjectButton = () => {
   const [open, setOpen] = React.useState(false);
-  const navigate=useNavigate();
+  const navigate = useNavigate();
   const handleOpen = () => setOpen(true);
   const handleClose = () => {
     setOpen(false);
     setFormData({
       name: "",
-      style: "sketch",
+      style: "cinematic",
       aspectRatio: "16:9",
     });
   };
@@ -53,7 +53,7 @@ const NewProjectButton = () => {
 
   const [formData, setFormData] = useState({
     name: "",
-    style: "sketch",
+    style: "cinematic",
     aspectRatio: "16:9",
   });
 
@@ -132,19 +132,28 @@ const NewProjectButton = () => {
             />
           </Box>
 
-          <Typography
-            sx={{
-              fontSize: "14px",
-              fontWeight: "500",
-              color: "secondary.dark",
-              marginTop: 4,
-              marginBottom: 1.5,
-            }}
-            variant="subtitle1"
-            gutterBottom
+          <Box
+            display={"flex"}
+            alignItems={"center"}
+            gap={1}
+            marginTop={4}
+            marginBottom={1.5}
           >
-            Art Style
-          </Typography>
+            <Typography
+              sx={{
+                fontSize: "14px",
+                fontWeight: "500",
+                color: "secondary.dark",
+              }}
+              variant="subtitle1"
+              gutterBottom
+            >
+              Art Style
+            </Typography>
+            <Typography variant="caption" color={"primary.main"}>
+              (Coming Soon)
+            </Typography>
+          </Box>
           <Grid container spacing={2}>
             {stylesData.map((item, idx) => (
               <Grid key={idx} item xs={6}>
@@ -156,12 +165,12 @@ const NewProjectButton = () => {
                   }}
                 >
                   <Box
-                    onClick={() =>
-                      setFormData((prev) => ({
-                        ...prev,
-                        style: item.value,
-                      }))
-                    }
+                    // onClick={() =>
+                    //   setFormData((prev) => ({
+                    //     ...prev,
+                    //     style: item.value,
+                    //   }))
+                    // }
                     sx={{
                       width: 256,
                       height: 168,
@@ -187,7 +196,7 @@ const NewProjectButton = () => {
             ))}
           </Grid>
 
-          <Typography
+          {/* <Typography
             sx={{
               fontSize: "14px",
               fontWeight: "500",
@@ -251,7 +260,7 @@ const NewProjectButton = () => {
                 </Box>
               </Box>
             ))}
-          </Box>
+          </Box> */}
 
           <Box
             sx={{

@@ -135,8 +135,8 @@ const FramesGrid = ({ sceneData }) => {
   };
   const handleOpen = (index) => {
     setSelectedFrame(index);
-    setSelectedFrameUrl(frameData[index]?.activeUrl)
-    // setOpen(true);
+    setSelectedFrameUrl(frameData[index]?.activeUrl);
+    setOpen(true);
   };
 
   const handleClose = () => {
@@ -155,16 +155,16 @@ const FramesGrid = ({ sceneData }) => {
     drawingContext.clearRect(0, 0, drawingCanvas.width, drawingCanvas.height);
   };
 
-  const closeEditBar=()=>{
-    setEditBar(false)
-  }
-  const closeGenerateFrame=()=>{
-    setRegenerateScene(false)
-  }
+  const closeEditBar = () => {
+    setEditBar(false);
+  };
+  const closeGenerateFrame = () => {
+    setRegenerateScene(false);
+  };
   const [anchorEl, setAnchorEl] = useState(null);
 
   const handleMenuClick = (event) => {
-    // event.stopPropagation();
+    event.stopPropagation();
     setAnchorEl(event.currentTarget);
   };
 
@@ -180,11 +180,7 @@ const FramesGrid = ({ sceneData }) => {
   // },[frameData,selectedFrame])
   return (
     <div>
-      <Grid
-        container
-        spacing={2}
-        sx={{ padding: "10px", height: "80vh", overflowY: "scroll" }}
-      >
+      <Grid container spacing={2} sx={{ padding: "10px" }}>
         {frameData &&
           frameData.length > 0 &&
           frameData.map((frame, index) => (
@@ -198,7 +194,7 @@ const FramesGrid = ({ sceneData }) => {
                   border: "1px solid #F1F1F1",
                   cursor: "pointer",
                 }}
-                // onClick={() => handleOpen(index)}
+                onClick={() => handleOpen(index)}
               >
                 <CardContent sx={{ position: "relative" }}>
                   <div
@@ -258,11 +254,13 @@ const FramesGrid = ({ sceneData }) => {
                         </CircleButton> */}
                       </LeftButtonContainer>
                       <RightButtonContainer>
-                        <CircleButton onClick={(e)=>{
-                          handleMenuClick(e)
-                          handleOpen(index)
-                          }}>
-                          <MoreVertOutlined/>
+                        <CircleButton
+                          onClick={(e) => {
+                            handleMenuClick(e);
+                            // handleOpen(index);
+                          }}
+                        >
+                          <MoreVertOutlined />
                         </CircleButton>
                         {/* <CircleButton
                           onClick={(e) => {
@@ -432,43 +430,44 @@ const FramesGrid = ({ sceneData }) => {
                 />
                 {/* edit bar */}
                 <Box sx={{ width: "20%" }}>
-                  {
-                    isRegenerateScene && (
+                  {isRegenerateScene && (
+                    <Box
+                      sx={{
+                        bgcolor: "white",
+                        borderRadius: "12px",
+                        p: 2,
+                      }}
+                    >
                       <Box
                         sx={{
-                          bgcolor: "white",
-                          borderRadius: "12px",
-                          p: 2,
+                          display: "flex",
+                          justifyContent: "space-between",
+                          alignItems: "center",
+                          mb: 2,
                         }}
                       >
-                        <Box
+                        <Typography
                           sx={{
-                            display: "flex",
-                            justifyContent: "space-between",
-                            alignItems: "center",
-                            mb: 2,
+                            fontSize: "14px",
+                            fontWeight: "500",
+                            color: "secondary.dark",
                           }}
                         >
-                          <Typography
-                            sx={{
-                              fontSize: "14px",
-                              fontWeight: "500",
-                              color: "secondary.dark",
-                            }}
-                          >
-                            Generate Frame
-                          </Typography>
-                          <IconButton
-                            onClick={closeGenerateFrame}
-                            sx={{ top: "-10px" }}
-                          >
-                            <Close />
-                          </IconButton>
-                        </Box>
-                        <GenerateFrameMain closeGenerateFrame={closeGenerateFrame} selectedFrame={selectedFrame}/>
+                          Generate Frame
+                        </Typography>
+                        <IconButton
+                          onClick={closeGenerateFrame}
+                          sx={{ top: "-10px" }}
+                        >
+                          <Close />
+                        </IconButton>
                       </Box>
-                    )
-                  }
+                      <GenerateFrameMain
+                        closeGenerateFrame={closeGenerateFrame}
+                        selectedFrame={selectedFrame}
+                      />
+                    </Box>
+                  )}
                   {isEditBarOpen && (
                     <>
                       <Box
@@ -575,7 +574,12 @@ const FramesGrid = ({ sceneData }) => {
                             />
                           </Button>
                         </Box>
-                        <FrameEditMainComponent frameData={frameData} selectedFrame={selectedFrame} closeEditBar={closeEditBar} setSelectedFrameUrl={setSelectedFrameUrl}/>
+                        <FrameEditMainComponent
+                          frameData={frameData}
+                          selectedFrame={selectedFrame}
+                          closeEditBar={closeEditBar}
+                          setSelectedFrameUrl={setSelectedFrameUrl}
+                        />
                       </Box>
                       {isSettingOpen && (
                         <Box sx={{ position: "relative" }}>
@@ -682,10 +686,10 @@ const FramesGrid = ({ sceneData }) => {
           },
         }}
       >
-        <MenuItem
-          onClick={()=>{
-            setOpen(true)
-            handleCloseMenu()
+        {/* <MenuItem
+          onClick={() => {
+            setOpen(true);
+            handleCloseMenu();
           }}
           sx={{
             display: "flex",
@@ -700,10 +704,13 @@ const FramesGrid = ({ sceneData }) => {
             alt="Edit Icon"
             style={{ width: "15px", height: "15px" }}
           />
-        </MenuItem>
+        </MenuItem> */}
         <MenuItem
-          onClick={()=>{
-            downloadImage(frameData[selectedFrame].framesUrl[selectedFrameUrl], frameData[selectedFrame].colorType);
+          onClick={() => {
+            downloadImage(
+              frameData[selectedFrame].framesUrl[selectedFrameUrl],
+              frameData[selectedFrame].colorType
+            );
             handleCloseMenu();
           }}
           sx={{

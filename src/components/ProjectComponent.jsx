@@ -113,7 +113,7 @@ const ProjectComponent = ({ asset, setAsset }) => {
             />
 
             <Typography color={"greys.darkest"} fontWeight={500}>
-              No Projects created
+              No Scenes created
             </Typography>
             <Typography
               variant="body2"

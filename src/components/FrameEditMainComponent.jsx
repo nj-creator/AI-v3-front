@@ -26,7 +26,12 @@ import {
 import { useFrame } from "../hooks/useFrame";
 import { LoadingButton } from "@mui/lab";
 
-const FrameEditMainComponent = ({ frameData, selectedFrame, closeEditBar,setSelectedFrameUrl }) => {
+const FrameEditMainComponent = ({
+  frameData,
+  selectedFrame,
+  closeEditBar,
+  setSelectedFrameUrl,
+}) => {
   const { updateRegeneratedFrame } = useFrame();
   const [loading, setLoading] = useState(false);
   const [requestData, setRequestData] = useState({
@@ -50,7 +55,13 @@ const FrameEditMainComponent = ({ frameData, selectedFrame, closeEditBar,setSele
     formData.append("width", image.width);
     formData.append("inpainting_action", requestData.inpaintingType);
     formData.append("frame_id", frameData[selectedFrame]._id);
-    await updateRegeneratedFrame(formData,selectedFrame,closeEditBar,setLoading,setSelectedFrameUrl);
+    await updateRegeneratedFrame(
+      formData,
+      selectedFrame,
+      closeEditBar,
+      setLoading,
+      setSelectedFrameUrl
+    );
   };
 
   const dropdownData = [
@@ -229,46 +240,53 @@ const FrameEditMainComponent = ({ frameData, selectedFrame, closeEditBar,setSele
                 {dropdown.title}
               </Typography>
             </Box>
-            <Select
-              value={requestData[dropdown.name]}
-              onChange={(e) =>
-                setRequestData((prev) => ({
-                  ...prev,
-                  [dropdown.name]: e.target.value,
-                }))
-              }
-              InputProps={{
-                style: {
-                  padding: "0px",
-                },
-              }}
-              sx={{
-                fontSize: "14px",
-                fontWeight: "500",
-                boxShadow: "none",
-                border: "none",
-                "& .MuiOutlinedInput-input": {
-                  padding: 0,
-                },
-                ".MuiOutlinedInput-notchedOutline": {
-                  border: 0,
-                },
-                "&.MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline":
-                  {
+            {dropdown.name !== "colorType" ? (
+              <Typography variant="caption" color={"primary.main"} mx={2}>
+                {" "}
+                (Coming soon)
+              </Typography>
+            ) : (
+              <Select
+                value={requestData[dropdown.name]}
+                onChange={(e) =>
+                  setRequestData((prev) => ({
+                    ...prev,
+                    [dropdown.name]: e.target.value,
+                  }))
+                }
+                InputProps={{
+                  style: {
+                    padding: "0px",
+                  },
+                }}
+                sx={{
+                  fontSize: "14px",
+                  fontWeight: "500",
+                  boxShadow: "none",
+                  border: "none",
+                  "& .MuiOutlinedInput-input": {
+                    padding: 0,
+                  },
+                  ".MuiOutlinedInput-notchedOutline": {
                     border: 0,
                   },
-                "& .MuiSelect-icon": {
-                  transform: "rotate(0deg)",
-                },
-              }}
-              IconComponent={KeyboardArrowDown}
-            >
-              {dropdown.options.map((item, idx) => (
-                <MenuItem key={idx} value={item.value}>
-                  {item.title}
-                </MenuItem>
-              ))}
-            </Select>
+                  "&.MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline":
+                    {
+                      border: 0,
+                    },
+                  "& .MuiSelect-icon": {
+                    transform: "rotate(0deg)",
+                  },
+                }}
+                IconComponent={KeyboardArrowDown}
+              >
+                {dropdown.options.map((item, idx) => (
+                  <MenuItem key={idx} value={item.value}>
+                    {item.title}
+                  </MenuItem>
+                ))}
+              </Select>
+            )}
           </Box>
           <Box
             sx={{ display: "flex", justifyContent: "center", width: "100%" }}
@@ -287,7 +305,9 @@ const FrameEditMainComponent = ({ frameData, selectedFrame, closeEditBar,setSele
         }}
       >
         <LoadingButton
-          disabled={(requestData.description === "") || (requestData.inpaintingType === "")}
+          disabled={
+            requestData.description === "" || requestData.inpaintingType === ""
+          }
           onClick={handleGenerateClick}
           variant="contained"
           color="primary"

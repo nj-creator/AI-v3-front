@@ -164,7 +164,12 @@ const FrameLeftPanel = ({ sceneData }) => {
             />
             Genre
           </Typography>
-          <Select
+
+          <Typography variant="caption" color={"primary.main"} mx={2}>
+            {" "}
+            (Coming soon)
+          </Typography>
+          {/* <Select
             value={sceneData.genre}
             sx={{
               fontSize: "14px",
@@ -185,7 +190,7 @@ const FrameLeftPanel = ({ sceneData }) => {
                 {item.title}
               </MenuItem>
             ))}
-          </Select>
+          </Select> */}
         </Box>
         <Box
           sx={{

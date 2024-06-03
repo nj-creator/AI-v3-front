@@ -3,16 +3,14 @@ import Toolbar from "@mui/material/Toolbar";
 import SwitchTheme from "./SwitchTheme";
 import ProfileButton from "./ProfileButton";
 
-import { Box, Button, Typography } from "@mui/material";
+import { Box, Button } from "@mui/material";
 import LeftArrow from "../Assets/Images/arrow-left.png";
 
 import NewFrameButton from "./NewFrameButton";
 import ExportAllButton from "./ExportAllButton";
 import { useNavigate } from "react-router-dom";
-import { useSceneDetails } from "../hooks/useScene";
 const HeaderScene = () => {
   const navigate = useNavigate();
-  const { sceneDetails } = useSceneDetails();
 
   return (
     <AppBar
@@ -21,26 +19,23 @@ const HeaderScene = () => {
     >
       <Toolbar sx={{ justifyContent: "space-between" }}>
         <Box display={"flex"} gap={3} color={"black"} alignItems={"center"}>
-        <Button
-          onClick={() => navigate(-1)}
-          sx={{
-            borderRadius: 24,
-            height: "40px",
-            bgcolor: "#f1f1f1",
-            fontSize: "14px",
-            color: "greys.darkest",
-          }}
-        >
-          <img
-            src={LeftArrow}
-            alt="New Project Icon"
-            style={{ marginRight: 2, width: 20, height: 20 }}
-          />
-          Back to Scene
-        </Button>
-          <Typography variant="h5" component="div" style={{ fontSize: "20px",textTransform:"capitalize" }}>
-            {sceneDetails?.title}
-          </Typography>
+          <Button
+            onClick={() => navigate(-1)}
+            sx={{
+              borderRadius: 24,
+              height: "40px",
+              bgcolor: "#f1f1f1",
+              fontSize: "14px",
+              color: "greys.darkest",
+            }}
+          >
+            <img
+              src={LeftArrow}
+              alt="New Project Icon"
+              style={{ marginRight: 2, width: 20, height: 20 }}
+            />
+            Back to Scene
+          </Button>
         </Box>
         <div style={{ display: "flex", alignItems: "center" }}>
           {/* New Project Button */}

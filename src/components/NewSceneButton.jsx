@@ -41,14 +41,13 @@ const style = {
 };
 
 const NewSceneButton = () => {
-  const projectScenes=useSelector(state=>state.scene.data)
-  console.log(projectScenes);
+  const projectScenes = useSelector((state) => state.scene.data);
   const [open, setOpen] = React.useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => {
     setOpen(false);
     setFormData({
-      title: `Scene ${projectScenes?.length+1}`,
+      title: `Scene ${projectScenes?.length + 1}`,
       script: "",
       location: "",
       genre: "",
@@ -67,7 +66,7 @@ const NewSceneButton = () => {
   }, [isError]);
 
   const [formData, setFormData] = useState({
-    title: `Scene ${projectScenes?.length+1}`,
+    title: `Scene ${projectScenes?.length + 1}`,
     script: "",
     location: "",
     genre: "",
@@ -91,9 +90,14 @@ const NewSceneButton = () => {
       setFormData((prev) => ({ ...prev, framesNumber: prev.framesNumber - 1 }));
     }
   };
-  useEffect(()=>{
-    setFormData({...formData,title:`Scene ${projectScenes?.length+1}`})
-  },[projectScenes])
+  useEffect(() => {
+    setFormData((prev) => ({
+      ...prev,
+      title: Number(projectScenes?.length + 1)
+        ? `Scene ${projectScenes?.length + 1}`
+        : prev.title,
+    }));
+  }, [projectScenes]);
 
   return (
     <>
@@ -224,26 +228,33 @@ const NewSceneButton = () => {
           </Box>
 
           <Box sx={{ mb: 2 }}>
-            <Typography
-              sx={{
-                fontSize: "14px",
-                fontWeight: "500",
-                color: "secondary.dark",
-              }}
-              variant="subtitle1"
-              display="flex"
-              alignItems="center"
-            >
-              <img
-                src={LocationIcon}
-                alt="Icon1"
-                style={{ marginRight: "8px", width: "16px" }}
-              />
-              Location
-            </Typography>
+            <Box display={"flex"} alignItems={"center"} gap={1}>
+              <Typography
+                sx={{
+                  fontSize: "14px",
+                  fontWeight: "500",
+                  color: "secondary.dark",
+                }}
+                variant="subtitle1"
+                display="flex"
+                alignItems="center"
+              >
+                <img
+                  src={LocationIcon}
+                  alt="Icon1"
+                  style={{ marginRight: "8px", width: "16px" }}
+                />
+                Location
+              </Typography>
+              <Typography variant="caption" color={"primary.main"}>
+                {" "}
+                (Coming soon)
+              </Typography>
+            </Box>
             <TextField
               value={formData.location}
               fullWidth
+              disabled
               onChange={(e) =>
                 setFormData((prev) => ({ ...prev, location: e.target.value }))
               }
@@ -286,7 +297,12 @@ const NewSceneButton = () => {
               Genre
             </Typography>
 
-            <Select
+            <Typography variant="caption" color={"primary.main"} mx={2}>
+              {" "}
+              (Coming soon)
+            </Typography>
+
+            {/* <Select
               value={formData.genre}
               onChange={handleGenreChange}
               displayEmpty
@@ -301,7 +317,9 @@ const NewSceneButton = () => {
                   },
               }}
             >
-              <MenuItem value=""><em>Select</em></MenuItem>
+              <MenuItem value="">
+                <em>Select</em>
+              </MenuItem>
               {genreData.map((item, idx) => (
                 <MenuItem
                   key={idx}
@@ -311,7 +329,7 @@ const NewSceneButton = () => {
                   {item.title}
                 </MenuItem>
               ))}
-            </Select>
+            </Select> */}
           </Box>
 
           <Box
@@ -419,7 +437,8 @@ const NewSceneButton = () => {
           >
             <LoadingButton
               disabled={Object.entries(formData).some(
-                ([key, value]) => key !== "location" && value === ""
+                ([key, value]) =>
+                  key !== "location" && key !== "genre" && value === ""
               )}
               onClick={() =>
                 createScene({ ...formData, projectId }, handleClose)

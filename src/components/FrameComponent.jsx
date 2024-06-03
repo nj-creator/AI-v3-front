@@ -48,23 +48,23 @@ const FrameComponent = ({ asset, setAsset }) => {
   ]);
 
   return (
-    <Box sx={{ marginBottom: 2, marginTop: 3, marginLeft: 3 }}>
-      {/* <Box
-        sx={{
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "space-between",
-          marginBottom: 2,
-          marginTop: 3,
-          marginLeft: 3,
-        }}
+    <Box
+      sx={{
+        marginBottom: 2,
+        marginTop: 3,
+        marginLeft: 3,
+        height: "85vh",
+        overflowY: "scroll",
+      }}
+    >
+      <Typography
+        variant="h5"
+        component="div"
+        style={{ fontSize: "32px", textAlign: "center" }}
       >
-        <Box sx={{ display: "flex", alignItems: "center" }}>
-          <Typography variant="h5" component="div" style={{ fontSize: "32px" }}>
-            {sceneDetails?.title}
-          </Typography>
-        </Box>
-      </Box> */}
+        {sceneDetails?.title}
+      </Typography>
+
       <FramesGrid sceneData={sceneDetails} />
     </Box>
   );

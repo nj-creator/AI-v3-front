@@ -39,6 +39,7 @@ const Login = () => {
       <Descope
         flowId="sign-up-or-in"
         redirectUrl={"http://localhost:5173/login"}
+        // redirectUrl={"https://beta.immersfy.com/login"}
         // redirectUrl={"https://immersfy-v3.vercel.app/login"}
         theme="dark"
         onSuccess={(e) => {
