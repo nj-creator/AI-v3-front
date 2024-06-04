@@ -13,7 +13,7 @@ const ProjectGrid = ({ projectData }) => {
   const navigate = useNavigate();
 
   return (
-    <Grid container spacing={2} sx={{ height: "80vh", overflowY: "scroll" }}>
+    <Grid container spacing={2} sx={{ height: "84vh", overflowY: "scroll" }}>
       {/* eslint-disable-next-line react/prop-types */}
       {projectData?.map((project, index) => (
         <Grid item xs={12} sm={6} md={4} lg={3} key={index}>

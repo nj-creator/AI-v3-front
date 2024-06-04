@@ -9,7 +9,7 @@ import ProfileButton from "./ProfileButton";
 import CreditsButton from "./CreditsButton";
 import NewProjectButton from "./NewProjectButton";
 
-const Header = () => {
+const Header = ({loading,setLoading}) => {
   return (
     <AppBar
       position="static"
@@ -25,7 +25,7 @@ const Header = () => {
         </div>
         <div style={{ display: "flex", alignItems: "center" }}>
           {/* New Project Button */}
-          <NewProjectButton />
+          <NewProjectButton loading={loading} setLoading={setLoading}/>
 
           {/* Light Orange Button */}
           {/* <CreditsButton /> */}

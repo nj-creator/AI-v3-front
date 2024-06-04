@@ -5,6 +5,7 @@ import Button from "@mui/material/Button";
 import {
   Alert,
   Box,
+  CircularProgress,
   Grid,
   Modal,
   Snackbar,
@@ -16,6 +17,8 @@ import { LoadingButton } from "@mui/lab";
 import { Save } from "@mui/icons-material";
 import { stylesData } from "../Data/dropdownData";
 import { useNavigate } from "react-router-dom";
+import checkTrial from "../hooks/checkTrial";
+import SubscriptionModal from "./SubscriptionModal";
 
 const style = {
   position: "absolute",
@@ -30,10 +33,19 @@ const style = {
   p: 4,
 };
 
-const NewProjectButton = () => {
+const NewProjectButton = ({loading,setLoading}) => {
   const [open, setOpen] = React.useState(false);
+  const [showSubscriptionModal, setShowSubscriptionModal] = useState(false);
   const navigate = useNavigate();
-  const handleOpen = () => setOpen(true);
+  const handleOpen = async () => {
+    const isTrialComplete=await checkTrial("project")
+    // if (!isTrialComplete) {
+      setOpen(true)
+    // }else{
+    //   console.log("free trial completed");
+    //   setShowSubscriptionModal(true);
+    // }
+  };
   const handleClose = () => {
     setOpen(false);
     setFormData({
@@ -46,6 +58,19 @@ const NewProjectButton = () => {
   const [errorSnackbar, setErrorSnackbar] = useState(false);
 
   const { createProject, isLoading, isError, errorMessage } = useProject();
+  const [navData,setNavData]=useState({id:"",name:""})
+
+  useEffect(() => {
+    if (loading) {
+      const timer = setTimeout(() => {
+        setLoading(false);
+      }, 3000);
+      return () => {
+        clearTimeout(timer)
+        navigate(`/project/${navData.id}?title=${navData.name}`)
+      };
+    }
+  }, [loading]);
 
   useEffect(() => {
     setErrorSnackbar(isError);
@@ -71,7 +96,8 @@ const NewProjectButton = () => {
           "&:hover": { backgroundColor: "primary.light" },
         }}
       >
-        + New Project
+        <span style={{ fontSize: "24px", fontWeight: "400" }}> + </span> &nbsp;
+         New Project
       </Button>
       <Modal
         open={open}
@@ -270,7 +296,7 @@ const NewProjectButton = () => {
           >
             <LoadingButton
               disabled={Object.values(formData).some((value) => value === "")}
-              onClick={() => createProject(formData, handleClose, navigate)}
+              onClick={() => createProject(formData, handleClose,setLoading,setNavData)}
               variant="contained"
               color="primary"
               fullWidth
@@ -300,6 +326,14 @@ const NewProjectButton = () => {
           {errorMessage}
         </Alert>
       </Snackbar>
+      {
+        loading &&
+      <Box display={"flex"} flexDirection={"column"} alignItems={"center"} justifyContent={"center"} gap={2} sx={{position:"absolute",top:0,left:0,width:"100vw",height:"100vh"}}>
+        <CircularProgress />
+        <Typography color={"primary.light"}>Redirecting to scenes...</Typography>
+      </Box>
+      }
+      <SubscriptionModal setShowSubscriptionModal={setShowSubscriptionModal} showSubscriptionModal={showSubscriptionModal}/>
     </>
   );
 };

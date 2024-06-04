@@ -35,14 +35,15 @@ export const useProject = (fetchProjects = false) => {
   }, [fetchProjects, getProjects]);
 
   const createProject = useCallback(
-    async (payload, closePopup, navigate) => {
+    async (payload, closePopup,setLoading,setNavData) => {
       try {
         dispatch(projectActions.setProjectLoading());
 
         const data=await postData("/project/create", payload);
         getProjects();
         closePopup();
-        navigate(`/project/${data?.data?._id}?title=${createUrlQuery(data?.data?.name)}`)
+        setLoading(true);
+        setNavData({id:data?.data?._id,name:createUrlQuery(data?.data?.name)})
 
       } catch (error) {
         dispatch(

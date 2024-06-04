@@ -1,6 +1,6 @@
 import { CropLandscape, CropPortrait, CropSquare } from "@mui/icons-material";
 import SketchThumbnail from "../Assets/Images/sketch_thumbnail.png";
-
+import CinematicThumbnail from "../Assets/Images/cinematic_thumbnail.png";
 export const stylesData = [
   {
     title: "Sketch",
@@ -10,7 +10,7 @@ export const stylesData = [
   {
     title: "Cinematic",
     value: "cinematic",
-    image: SketchThumbnail,
+    image: CinematicThumbnail,
   },
 ];
 

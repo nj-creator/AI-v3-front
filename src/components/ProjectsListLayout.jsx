@@ -18,7 +18,7 @@ const ProjectTable = ({ projectData }) => {
       style={{
         width: "95%",
         margin: "10px",
-        height: "80vh",
+        height: "83vh",
         overflowY: "scroll",
       }}
     >

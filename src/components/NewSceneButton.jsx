@@ -27,6 +27,8 @@ import { useScene } from "../hooks/useScene";
 import { useParams } from "react-router-dom";
 import { colorTypeData, genreData } from "../Data/dropdownData";
 import { useSelector } from "react-redux";
+import checkTrial from "../hooks/checkTrial";
+import SubscriptionModal from "./SubscriptionModal";
 const style = {
   position: "absolute",
   top: "50%",
@@ -42,8 +44,18 @@ const style = {
 
 const NewSceneButton = () => {
   const projectScenes = useSelector((state) => state.scene.data);
-  const [open, setOpen] = React.useState(false);
-  const handleOpen = () => setOpen(true);
+  const [open, setOpen] = useState(false);
+  const [showSubscriptionModal, setShowSubscriptionModal] = useState(false);
+   const handleOpen = async () => {
+    const isTrialCompleteForScene=await checkTrial("scene")
+    const isTrialCompleteForFrame=await checkTrial("frame")
+    // if (!isTrialCompleteForScene && !isTrialCompleteForFrame) {
+      setOpen(true);
+    // }else{
+    //   console.log("free trial completed");
+    //   setShowSubscriptionModal(true);
+    // }
+  };
   const handleClose = () => {
     setOpen(false);
     setFormData({
@@ -227,7 +239,7 @@ const NewSceneButton = () => {
             />
           </Box>
 
-          <Box sx={{ mb: 2 }}>
+          {/* <Box sx={{ mb: 2 }}>
             <Box display={"flex"} alignItems={"center"} gap={1}>
               <Typography
                 sx={{
@@ -269,7 +281,7 @@ const NewSceneButton = () => {
                 },
               }}
             />
-          </Box>
+          </Box> */}
 
           <Box
             sx={{
@@ -471,6 +483,7 @@ const NewSceneButton = () => {
           {errorMessage}
         </Alert>
       </Snackbar>
+      <SubscriptionModal setShowSubscriptionModal={setShowSubscriptionModal} showSubscriptionModal={showSubscriptionModal}/>
     </>
   );
 };

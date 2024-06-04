@@ -41,7 +41,7 @@ const Login = () => {
         redirectUrl={"http://localhost:5173/login"}
         // redirectUrl={"https://beta.immersfy.com/login"}
         // redirectUrl={"https://immersfy-v3.vercel.app/login"}
-        theme="dark"
+        theme="light"
         onSuccess={(e) => {
           const { email, name, userId } = e.detail.user;
           descopeFunction({ email, name, uniqueId: userId }, () =>

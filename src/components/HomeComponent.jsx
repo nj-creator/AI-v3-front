@@ -15,7 +15,7 @@ import NewProjectButton from "./NewProjectButton";
 import { MovieFilter } from "@mui/icons-material";
 import Loader from "./Loader";
 
-const HomeComponent = () => {
+const HomeComponent = ({loading}) => {
   const { data, isLoading } = useProject(true);
 
   const [currView, setCurrView] = useState("Group");
@@ -146,9 +146,9 @@ const HomeComponent = () => {
         </Box>
       </Box>
 
-      {isLoading ? (
+      {isLoading && !loading ? (
         <Loader loadigText="Loading projects..." />
-      ) : data?.length > 0 ? (
+      ) :loading?<Box/>: data?.length > 0 ? (
         currView === "Group" ? (
           <ProjectGrid projectData={data} />
         ) : (

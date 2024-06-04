@@ -57,7 +57,7 @@ export const router = createBrowserRouter([
   },
   {
     path: "/project/:projectId/scene/:sceneId",
-    element: <MakeScene />,
+    element:    <PrivateRoutes> <MakeScene /></PrivateRoutes>,
     // loader: rootLoader,
   },
 ]);
