@@ -39,12 +39,12 @@ const NewProjectButton = ({loading,setLoading}) => {
   const navigate = useNavigate();
   const handleOpen = async () => {
     const isTrialComplete=await checkTrial("project")
-    // if (!isTrialComplete) {
+    if (!isTrialComplete) {
       setOpen(true)
-    // }else{
-    //   console.log("free trial completed");
-    //   setShowSubscriptionModal(true);
-    // }
+    }else{
+      console.log("free trial completed");
+      setShowSubscriptionModal(true);
+    }
   };
   const handleClose = () => {
     setOpen(false);

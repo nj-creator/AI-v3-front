@@ -1,6 +1,8 @@
 import { Close } from '@mui/icons-material';
 import { Box, Button, IconButton, Modal, Typography } from '@mui/material'
 import React from 'react'
+import { postData } from '../utils/serverHelper';
+import { useAuth } from '../hooks/useAuth';
 const style = {
   position: "absolute",
   top: "50%",
@@ -15,6 +17,15 @@ const style = {
 };
 const SubscriptionModal = ({setShowSubscriptionModal,showSubscriptionModal}) => {
     const handleClose=()=>setShowSubscriptionModal(false);
+    const {user}=useAuth();
+    const handleRedirectToPayment=async()=>{
+        try {
+        const data=await postData("/subscription/checkout",{ customerId:user.stripeCustomerId, priceId:"price_1PNxImAsxEEeEMz6l0TMUHL6" }) 
+        window.location.replace(data?.checkoutUrl)
+        } catch (error) {
+            console.log(error,"error while doing payment");
+        }
+    }
   return (
     <Modal open={showSubscriptionModal}>
         <Box sx={style}>
@@ -42,7 +53,9 @@ const SubscriptionModal = ({setShowSubscriptionModal,showSubscriptionModal}) => 
               >
                 Your free trial has ended. To continue using our services, please consider purchasing a subscription.
               </Typography>
-              <Button variant='contained'>Subscribe Now</Button>
+            <Button variant='contained' onClick={handleRedirectToPayment}>
+             Subscribe Now
+            </Button>
           </Box>
           </Box>
         </Box>

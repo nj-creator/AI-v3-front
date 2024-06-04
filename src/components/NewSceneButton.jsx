@@ -49,12 +49,12 @@ const NewSceneButton = () => {
    const handleOpen = async () => {
     const isTrialCompleteForScene=await checkTrial("scene")
     const isTrialCompleteForFrame=await checkTrial("frame")
-    // if (!isTrialCompleteForScene && !isTrialCompleteForFrame) {
+    if (!isTrialCompleteForScene && !isTrialCompleteForFrame) {
       setOpen(true);
-    // }else{
-    //   console.log("free trial completed");
-    //   setShowSubscriptionModal(true);
-    // }
+    }else{
+      console.log("free trial completed");
+      setShowSubscriptionModal(true);
+    }
   };
   const handleClose = () => {
     setOpen(false);
