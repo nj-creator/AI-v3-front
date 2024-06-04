@@ -165,12 +165,8 @@ const NewProjectButton = () => {
                   }}
                 >
                   <Box
-                    // onClick={() =>
-                    //   setFormData((prev) => ({
-                    //     ...prev,
-                    //     style: item.value,
-                    //   }))
-                    // }
+                    component="img"
+                    src={item.image}
                     sx={{
                       width: 256,
                       height: 168,
@@ -179,6 +175,8 @@ const NewProjectButton = () => {
                       marginBottom: 1,
                       border:
                         formData.style == item.value ? "2px solid #FF3C00" : "",
+                      padding: 0.5,
+                      opacity: formData.style == item.value ? 1 : 0.5,
                     }}
                   />
                   <Typography
