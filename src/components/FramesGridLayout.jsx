@@ -1,40 +1,29 @@
-import { useEffect, useRef, useState } from "react";
+import { useRef, useState } from "react";
 import Grid from "@mui/material/Grid";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import Typography from "@mui/material/Typography";
 import {
   Box,
-  Button,
-  IconButton,
   MenuItem,
   Modal,
   Popover,
   Skeleton,
-  Slider,
 } from "@mui/material";
 import { styled } from "@mui/system";
-import LeftArrowIcon from "../Assets/Images/arrow-left-white.png";
-import RighttArrowIcon from "../Assets/Images/arrow-right-white.png";
 import DownloadIcon from "../Assets/Images/download-circle.png";
-import EditViewIcon from "../Assets/Images/Edit.png";
 import DeleteIcon from "../Assets/Images/delete.png";
 import MoveIcon from "../Assets/Images/nine-dot.png";
-import EditIcon from "../Assets/Images/pencil.png";
 import HeaderFrame from "./HeaderFrame";
-import DrawIcon from "../Assets/Images/draw.png";
-import EraseIcon from "../Assets/Images/erase.png";
-import SettingsIcon from "../Assets/Images/settings.png";
-import ResetIcon from "../Assets/Images/reset.png";
-import FrameLeftPanel from "./FrameLeftPanel";
 import FrameMainPanel from "./FrameMainPanel";
 import FrameFooterPanel from "./FrameFooterPanel";
 import { useFrame } from "../hooks/useFrame";
 import { downloadImage } from "../utils/downloadImage";
 import FrameEditMainComponent from "./FrameEditMainComponent";
-import { Close, MoreVertOutlined } from "@mui/icons-material";
+import { MoreVertOutlined } from "@mui/icons-material";
 import GenerateFrameMain from "./GenerateFrameMain";
-// Styled components for overlay and circle button
+import GeneralMainPanel from "./GeneralMainPanel";
+
 const Overlay = styled("div")({
   position: "absolute",
   top: 0,
@@ -115,7 +104,7 @@ const FramesGrid = ({ sceneData }) => {
   const [selectedFrame, setSelectedFrame] = useState(0);
   const [isEditBarOpen, setEditBar] = useState(false);
   const [brushSize, setBrushSize] = useState(20);
-  const [isSettingOpen, setSettingBar] = useState(false);
+  const [isGeneralSetting, setGeneralSetting] = useState(false);
   const [isDrawing, setIsDrawing] = useState(false);
   const [drawButton, setDrawBtnClicked] = useState(false);
   const imageCanvasRef = useRef(null);
@@ -179,9 +168,6 @@ const FramesGrid = ({ sceneData }) => {
 
   const openMenu = Boolean(anchorEl);
   const id = open ? "simple-popover" : undefined;
-  // useEffect(()=>{
-  //   setSelectedFrameUrl(frameData[selectedFrame]?.activeUrl);
-  // },[frameData,selectedFrame])
   return (
     <div>
       <Grid container spacing={2} sx={{ padding: "10px" }}>
@@ -230,33 +216,7 @@ const FramesGrid = ({ sceneData }) => {
                             style={{ width: "20px", height: "20px" }}
                           />
                         </CircleButton>
-                        {/* <CircleButton
-                          onClick={(e) => {
-                            e.stopPropagation();
-                          }}
-                          sx={{
-                            marginTop: "60px",
-                            backgroundColor: "greys.darkest",
-                          }}
-                        >
-                          <img
-                            src={LeftArrowIcon}
-                            style={{ width: "20px", height: "20px" }}
-                          />
-                        </CircleButton> */}
-                        {/* <CircleButton
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            downloadImage(frame.framesUrl[0], frame.colorType);
-                          }}
-                          sx={{ marginTop: "60px" }}
-                        >
-                          <img
-                            src={DownloadIcon}
-                            style={{ width: "20px", height: "20px" }}
-                          />
-                        </CircleButton> */}
-                      </LeftButtonContainer>
+                        </LeftButtonContainer>
                       <RightButtonContainer>
                         <CircleButton
                           onClick={(e) => {
@@ -266,71 +226,9 @@ const FramesGrid = ({ sceneData }) => {
                         >
                           <MoreVertOutlined />
                         </CircleButton>
-                        {/* <CircleButton
-                          onClick={(e) => {
-                            e.stopPropagation();
-                          }}
-                          sx={{
-                            marginTop: "60px",
-                            backgroundColor: "greys.darkest",
-                          }}
-                        >
-                          <img
-                            src={RighttArrowIcon}
-                            style={{ width: "20px", height: "20px" }}
-                          />
-                        </CircleButton>
-                        <CircleButton
-                          sx={{ marginTop: "60px" }}
-                          onClick={(e) => {
-                            e.stopPropagation();
-                          }}
-                        >
-                          <img
-                            src={DeleteIcon}
-                            style={{ width: "20px", height: "20px" }}
-                          />
-                        </CircleButton> */}
                       </RightButtonContainer>
                     </Overlay>
                   </div>
-                  {/* <Box
-                    sx={{
-                      mt: 1,
-                      backgroundColor: "white",
-                      paddingX: "10px",
-                      border: "1px solid #F1F1F1",
-                      borderRadius: "8px",
-                    }}
-                  >
-                    <Typography
-                      variant="body"
-                      component="div"
-                      gutterBottom
-                      style={{
-                        marginTop: "5px",
-                        fontSize: "12px",
-                        fontWeight: "500",
-                        color: "#BEBEBE",
-                      }}
-                    >
-                      Prompt
-                    </Typography>
-                    <Typography
-                      className="limit_lines"
-                      variant="body"
-                      component="div"
-                      gutterBottom
-                      style={{
-                        marginTop: "5px",
-                        fontSize: "12px",
-                        fontWeight: "500",
-                        color: "#4D4D4D",
-                      }}
-                    >
-                      {frame.prompt}
-                    </Typography>
-                  </Box> */}
                 </CardContent>
               </Card>
             </Grid>
@@ -360,35 +258,6 @@ const FramesGrid = ({ sceneData }) => {
                     width={"100%"}
                     height={250}
                   />
-
-                  {/* <Box
-                    sx={{
-                      mt: 1,
-                      backgroundColor: "white",
-                      paddingX: "10px",
-                      border: "1px solid #F1F1F1",
-                      borderRadius: "8px",
-                    }}
-                  >
-                    <Typography
-                      variant="body"
-                      component="div"
-                      gutterBottom
-                      style={{
-                        fontSize: "12px",
-                        fontWeight: "500",
-                        color: "#BEBEBE",
-                      }}
-                    >
-                      Prompt
-                    </Typography>
-                    <Skeleton
-                      sx={{ borderRadius: 2, mb: 1 }}
-                      variant="rectangular"
-                      width={"100%"}
-                      height={54}
-                    />
-                  </Box> */}
                 </CardContent>
               </Card>
             </Grid>
@@ -415,7 +284,7 @@ const FramesGrid = ({ sceneData }) => {
                   px: "50px",
                 }}
               >
-                <FrameLeftPanel sceneData={sceneData} />
+                {/* <FrameLeftPanel sceneData={sceneData} /> */}
                 <FrameMainPanel
                   framesData={frameData}
                   selectedFrame={selectedFrame}
@@ -433,20 +302,37 @@ const FramesGrid = ({ sceneData }) => {
                   isRegenerateScene={isRegenerateScene}
                 />
                 {/* edit bar */}
-                <Box sx={{ width: "20%" }}>
+                <Box sx={{ minWidth: "5%",position:"relative",width:(isRegenerateScene||isEditBarOpen||isGeneralSetting)?"30%":"auto"}}>
+                  <Box display={"flex"} position={"absolute"} zIndex={100} right={0} top={0} height={"100%"} bgcolor={"white"} sx={{textOrientation:"sideways-right",writingMode:"vertical-rl",rotate:"180deg"}} px={1} justifyContent={"space-evenly"} boxShadow={5} alignItems={"center"} borderRadius={4}>
+                    <Typography onClick={()=>{
+                      setEditBar(!isEditBarOpen);
+                      setRegenerateScene(false);
+                      setGeneralSetting(false);
+                    }} sx={{cursor:"pointer",p:1,borderLeft:isEditBarOpen?"2px solid":0,borderColor:"primary.light"}}>Inpainting</Typography>
+                    <Typography onClick={()=>{
+                      setEditBar(false);
+                      setRegenerateScene(false);
+                      setGeneralSetting(!isGeneralSetting);
+                    }} sx={{cursor:"pointer",p:1,borderLeft:isGeneralSetting?"2px solid":0,borderColor:"primary.light"}}>General Settings</Typography>
+                    <Typography onClick={()=>{
+                      setEditBar(false);
+                      setRegenerateScene(!isRegenerateScene);
+                      setGeneralSetting(false);
+                    }} sx={{cursor:"pointer",p:1,borderLeft:isRegenerateScene?"2px solid":0,borderColor:"primary.light"}}>Regenerate</Typography>
+                  </Box>
                   {isRegenerateScene && (
                     <Box
                       sx={{
                         bgcolor: "white",
                         borderRadius: "12px",
                         p: 2,
+                        width:"100%",
+                        height:"100%",
+                        pr:10
                       }}
                     >
                       <Box
                         sx={{
-                          display: "flex",
-                          justifyContent: "space-between",
-                          alignItems: "center",
                           mb: 2,
                         }}
                       >
@@ -459,12 +345,6 @@ const FramesGrid = ({ sceneData }) => {
                         >
                           Generate Frame
                         </Typography>
-                        <IconButton
-                          onClick={closeGenerateFrame}
-                          sx={{ top: "-10px" }}
-                        >
-                          <Close />
-                        </IconButton>
                       </Box>
                       <GenerateFrameMain
                         closeGenerateFrame={closeGenerateFrame}
@@ -473,180 +353,45 @@ const FramesGrid = ({ sceneData }) => {
                     </Box>
                   )}
                   {isEditBarOpen && (
-                    <>
                       <Box
                         sx={{
                           bgcolor: "white",
                           borderRadius: "12px",
                           p: 2,
+                          width:"100%",
+                          height:"100%",
+                          pr:10
                         }}
                       >
-                        <Box
-                          sx={{
-                            display: "flex",
-                            justifyContent: "space-between",
-                            alignItems: "center",
-                            mb: 2,
-                          }}
-                        >
-                          <Typography
-                            sx={{
-                              fontSize: "14px",
-                              fontWeight: "500",
-                              color: "secondary.dark",
-                            }}
-                          >
-                            Edit Image
-                          </Typography>
-                          <IconButton
-                            onClick={()=>{
-                              handleClearCanvas()
-                              closeEditBar()
-                            }}
-                            sx={{ top: "-10px" }}
-                          >
-                            <Close />
-                          </IconButton>
-                        </Box>
-
-                        <Box
-                          sx={{
-                            display: "flex",
-                            justifyContent: "left",
-                            gap: "8px",
-                            mb: 2,
-                          }}
-                        >
-                          <Button
-                            onClick={setDraw}
-                            sx={{
-                              bgcolor: drawButton && !eraseButton?"#e6e3e3":"none",
-                              borderRadius: "8px",
-                              padding: "8px",
-                              width: "fit-content",
-                              minWidth: "fit-content",
-                            }}
-                          >
-                            <img
-                              src={DrawIcon}
-                              style={{ width: "20px", height: "20px"}}
-                            />
-                          </Button>
-                          <Button
-                            onClick={setErase}
-                            sx={{
-                              bgcolor: eraseButton?"#e6e3e3":"none",
-                              borderRadius: "8px",
-                              padding: "8px",
-                              width: "fit-content",
-                              minWidth: "fit-content",
-                            }}
-                          >
-                            <img
-                              src={EraseIcon}
-                              style={{ width: "20px", height: "20px", filter:eraseButton?"grayscale(1)":"grayscale(0)" }}
-                            />
-                          </Button>
-                          <Button
-                            onClick={() => setSettingBar(true)}
-                            sx={{
-                              bgcolor: isSettingOpen? "#e6e3e3":"none",
-                              borderRadius: "8px",
-                              padding: "8px",
-                              width: "fit-content",
-                              minWidth: "fit-content",
-                            }}
-                          >
-                            <img
-                              src={SettingsIcon}
-                              style={{ width: "20px", height: "20px" }}
-                            />
-                          </Button>
-                          <Button
-                            onClick={handleClearCanvas}
-                            sx={{
-                              // bgcolor: "#e6e3e3",
-                              borderRadius: "8px",
-                              padding: "8px",
-                              width: "fit-content",
-                              minWidth: "fit-content",
-                            }}
-                          >
-                            <img
-                              src={ResetIcon}
-                              style={{ width: "20px", height: "20px" }}
-                            />
-                          </Button>
-                        </Box>
                         <FrameEditMainComponent
+                          drawButton={drawButton}
+                          eraseButton={eraseButton}
+                          setDraw={setDraw}
+                          brushSize={brushSize}
+                          handleSliderChange={handleSliderChange}
+                          handleClearCanvas={handleClearCanvas}
+                          setErase={setErase}
                           frameData={frameData}
                           selectedFrame={selectedFrame}
                           closeEditBar={closeEditBar}
                           setSelectedFrameUrl={setSelectedFrameUrl}
                         />
                       </Box>
-                      {isSettingOpen && (
-                        <Box sx={{ position: "relative" }}>
-                          <Box
-                            sx={{
-                              bgcolor: "white",
-                              borderRadius: "8px",
-                              mt: 2,
-                              px: 3,
-                              py: 2,
-                              position: "absolute",
-                              width: "100%",
-                            }}
-                          >
-                            <Box
-                              sx={{
-                                display: "flex",
-                                justifyContent: "space-between",
-                                alignItems: "center",
-                                mb: 1,
-                              }}
-                            >
-                              <Box>
-                                <Typography
-                                  sx={{
-                                    fontSize: "14px",
-                                    fontWeight: "500",
-                                    color: "secondary.dark",
-                                  }}
-                                >
-                                  Brush Size
-                                </Typography>
-                              </Box>
-                              <IconButton
-                                onClick={() => setSettingBar(false)}
-                                sx={{ top: "0px" }}
-                              >
-                                <Close sx={{ width: "20px" }} />
-                              </IconButton>
-                            </Box>
-                            <Slider
-                              value={brushSize}
-                              onChange={handleSliderChange}
-                              //   aria-labelledby="discrete-slider"
-                              //   valueLabelDisplay="auto"
-                              step={1}
-                              min={1}
-                              max={100}
-                              sx={{
-                                "& .MuiSlider-rail": {
-                                  backgroundColor: "primary.lightest", // Change the color of the slider track
-                                },
-                                "& .MuiSlider-thumb": {
-                                  width: "15px",
-                                  height: "15px",
-                                },
-                              }}
-                            />
-                          </Box>
-                        </Box>
-                      )}
-                    </>
                   )}
+                  {isGeneralSetting && (
+                      <Box
+                      sx={{
+                          bgcolor: "white",
+                          borderRadius: "12px",
+                          p: 2,
+                          width:"100%",
+                          height:"100%",
+                          pr:10
+                        }}
+                      >
+                        <GeneralMainPanel/>
+                      </Box>
+                    )}
                 </Box>
                 {/* edit bar over */}
               </Box>
@@ -690,25 +435,6 @@ const FramesGrid = ({ sceneData }) => {
           },
         }}
       >
-        {/* <MenuItem
-          onClick={() => {
-            setOpen(true);
-            handleCloseMenu();
-          }}
-          sx={{
-            display: "flex",
-            justifyContent: "space-between",
-            fontSize: "14px",
-            color: "greys.darkest",
-          }}
-        >
-          Edit
-          <img
-            src={EditViewIcon}
-            alt="Edit Icon"
-            style={{ width: "15px", height: "15px" }}
-          />
-        </MenuItem> */}
         <MenuItem
           onClick={() => {
             downloadImage(

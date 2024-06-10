@@ -1,12 +1,17 @@
 import {
   Box,
+  Button,
   Divider,
   MenuItem,
   Select,
+  Slider,
   TextField,
   Typography,
 } from "@mui/material";
 import EnterScriptIcon from "../Assets/Images/enterscripticon.png";
+import ResetIcon from "../Assets/Images/reset.png";
+import DrawIcon from "../Assets/Images/draw.png";
+import EraseIcon from "../Assets/Images/erase.png";
 import {
   CenterFocusStrong,
   ColorLens,
@@ -27,6 +32,13 @@ import { useFrame } from "../hooks/useFrame";
 import { LoadingButton } from "@mui/lab";
 
 const FrameEditMainComponent = ({
+  handleClearCanvas,
+  setErase,
+  setDraw,
+  drawButton,
+  eraseButton,
+  handleSliderChange,
+  brushSize,
   frameData,
   selectedFrame,
   closeEditBar,
@@ -94,29 +106,73 @@ const FrameEditMainComponent = ({
   return (
     <Box>
       <Box>
-        <Box
-          sx={{
-            display: "flex",
-            justifyContent: "space-between",
-            py: 2,
-            gap: 1,
-          }}
-        >
-          <Box display={"flex"} alignItems={"center"} gap={1}>
-            <PhotoCamera />
-            <Typography
-              sx={{
+        <Box sx={{ py: 2 }}>
+          <Typography
+            sx={{
+              fontSize: "14px",
+              fontWeight: "500",
+              color: "secondary.dark",
+            }}
+            variant="subtitle1"
+            display="flex"
+            alignItems="center"
+          >
+            <img
+              src={EnterScriptIcon}
+              alt="Icon1"
+              style={{ marginRight: "8px", width: "16px" }}
+            />
+            Prompt
+          </Typography>
+          <TextField
+            fullWidth
+            placeholder="Enter the description"
+            multiline
+            variant="outlined"
+            rows={7}
+            value={requestData.description}
+            onChange={(e) =>
+              setRequestData((prev) => ({
+                ...prev,
+                description: e.target.value,
+              }))
+            }
+            InputProps={{
+              sx: {
+                bgcolor: "greys.lighter",
+                borderRadius: "12px",
+                marginTop: 1,
                 fontSize: "14px",
-                fontWeight: "500",
-                color: "secondary.dark",
-              }}
-              display="flex"
-              alignItems="center"
-            >
-              Inpainting Type
-            </Typography>
-          </Box>
-          <Select
+                color: "greys.darkest",
+                "& .MuiOutlinedInput-notchedOutline": {
+                  border: "none",
+                },
+              },
+            }}
+          />
+        </Box>
+
+        <Divider sx={{ backgroundColor: "#F1F1F1", width: "100%" }} />
+      </Box>
+      <Box py={2} display={"flex"} flexDirection={"column"} gap={2} >
+        <Typography
+            sx={{
+              fontSize: "14px",
+              fontWeight: "500",
+              color: "secondary.dark",
+            }}
+            variant="subtitle1"
+            display="flex"
+            alignItems="center"
+          >
+            <img
+              src={EnterScriptIcon}
+              alt="Icon1"
+              style={{ marginRight: "8px", width: "16px" }}
+            />
+            Edit Options
+          </Typography>
+            <Select
             value={requestData.inpaintingType}
             onChange={(e) =>
               setRequestData((prev) => ({
@@ -125,6 +181,7 @@ const FrameEditMainComponent = ({
               }))
             }
             displayEmpty
+            fullWidth
             placeholder="select"
             InputProps={{
               style: {
@@ -149,6 +206,10 @@ const FrameEditMainComponent = ({
               "& .MuiSelect-icon": {
                 transform: "rotate(0deg)",
               },
+              bgcolor:"grey.200",
+              py:1,
+              px:2,
+              borderRadius:5
             }}
             IconComponent={KeyboardArrowDown}
           >
@@ -159,15 +220,16 @@ const FrameEditMainComponent = ({
               </MenuItem>
             ))}
           </Select>
-        </Box>
-        <Box sx={{ display: "flex", justifyContent: "center", width: "100%" }}>
-          <Divider sx={{ backgroundColor: "#F1F1F1", width: "100%" }} />
-        </Box>
+        <Divider sx={{ backgroundColor: "#F1F1F1", width: "100%" }} />
+
       </Box>
 
-      <Box>
-        <Box sx={{ py: 2 }}>
-          <Typography
+      <Box
+        sx={{
+          my: 1,
+        }}
+      >
+        <Typography
             sx={{
               fontSize: "14px",
               fontWeight: "500",
@@ -182,119 +244,96 @@ const FrameEditMainComponent = ({
               alt="Icon1"
               style={{ marginRight: "8px", width: "16px" }}
             />
-            Description
+            Brushes
           </Typography>
-          <TextField
-            fullWidth
-            placeholder="Enter the description"
-            multiline
-            variant="outlined"
-            rows={2}
-            value={requestData.description}
-            onChange={(e) =>
-              setRequestData((prev) => ({
-                ...prev,
-                description: e.target.value,
-              }))
-            }
-            InputProps={{
-              sx: {
-                height: "60px",
-                bgcolor: "greys.lighter",
-                borderRadius: "12px",
-                marginTop: 1,
-                fontSize: "14px",
-                color: "greys.darkest",
-                "& .MuiOutlinedInput-notchedOutline": {
-                  border: "none",
-                },
-              },
-            }}
-          />
-        </Box>
-
-        <Divider sx={{ backgroundColor: "#F1F1F1", width: "100%" }} />
       </Box>
 
-      {dropdownData.map((dropdown, index) => (
-        <Box key={index}>
-          <Box
+      <Box
+        sx={{
+          display: "flex",
+          justifyContent: "center",
+          gap: "8px",
+          mb: 2,
+        }}
+      >
+        <Button
+          onClick={setDraw}
+          sx={{
+            bgcolor: drawButton && !eraseButton?"#e6e3e3":"none",
+            borderRadius: "8px",
+            padding: "8px",
+            width: "fit-content",
+            minWidth: "fit-content",
+          }}
+        >
+          <img
+            src={DrawIcon}
+            style={{ width: "20px", height: "20px"}}
+          />
+        </Button>
+        <Button
+          onClick={setErase}
+          sx={{
+            bgcolor: eraseButton?"#e6e3e3":"none",
+            borderRadius: "8px",
+            padding: "8px",
+            width: "fit-content",
+            minWidth: "fit-content",
+          }}
+        >
+          <img
+            src={EraseIcon}
+            style={{ width: "20px", height: "20px", filter:eraseButton?"grayscale(1)":"grayscale(0)" }}
+          />
+        </Button>
+        <Button
+          onClick={handleClearCanvas}
+          sx={{
+            borderRadius: "8px",
+            padding: "8px",
+            width: "fit-content",
+            minWidth: "fit-content",
+          }}
+        >
+          <img
+            src={ResetIcon}
+            style={{ width: "20px", height: "20px" }}
+          />
+        </Button>
+      </Box>
+      <Box
             sx={{
-              display: "flex",
-              justifyContent: "space-between",
-              py: 2,
-              gap: 1,
+              mb: 1,
             }}
           >
-            <Box display={"flex"} alignItems={"center"} gap={1}>
-              {dropdown.icon}
               <Typography
                 sx={{
                   fontSize: "14px",
                   fontWeight: "500",
                   color: "secondary.dark",
                 }}
-                display="flex"
-                alignItems="center"
               >
-                {dropdown.title}
+                Brush Size
               </Typography>
-            </Box>
-            {dropdown.name !== "colorType" ? (
-              <Typography variant="caption" color={"primary.main"} mx={2}>
-                {" "}
-                (Coming soon)
-              </Typography>
-            ) : (
-              <Select
-                value={requestData[dropdown.name]}
-                onChange={(e) =>
-                  setRequestData((prev) => ({
-                    ...prev,
-                    [dropdown.name]: e.target.value,
-                  }))
-                }
-                InputProps={{
-                  style: {
-                    padding: "0px",
-                  },
-                }}
-                sx={{
-                  fontSize: "14px",
-                  fontWeight: "500",
-                  boxShadow: "none",
-                  border: "none",
-                  "& .MuiOutlinedInput-input": {
-                    padding: 0,
-                  },
-                  ".MuiOutlinedInput-notchedOutline": {
-                    border: 0,
-                  },
-                  "&.MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline":
-                    {
-                      border: 0,
-                    },
-                  "& .MuiSelect-icon": {
-                    transform: "rotate(0deg)",
-                  },
-                }}
-                IconComponent={KeyboardArrowDown}
-              >
-                {dropdown.options.map((item, idx) => (
-                  <MenuItem key={idx} value={item.value}>
-                    {item.title}
-                  </MenuItem>
-                ))}
-              </Select>
-            )}
           </Box>
-          <Box
-            sx={{ display: "flex", justifyContent: "center", width: "100%" }}
-          >
-            <Divider sx={{ backgroundColor: "#F1F1F1", width: "100%" }} />
-          </Box>
-        </Box>
-      ))}
+          <Slider
+            value={brushSize}
+            onChange={handleSliderChange}
+            //   aria-labelledby="discrete-slider"
+            //   valueLabelDisplay="auto"
+            step={1}
+            min={1}
+            max={100}
+            sx={{
+              "& .MuiSlider-rail": {
+                backgroundColor: "primary.lightest", // Change the color of the slider track
+              },
+              "& .MuiSlider-thumb": {
+                width: "15px",
+                height: "15px",
+              },
+            }}
+          />
 
       <Box
         sx={{

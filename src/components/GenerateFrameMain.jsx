@@ -54,18 +54,18 @@ const GenerateFrameMain = ({ selectedFrame, closeGenerateFrame }) => {
       icon: <PhotoCamera />,
       options: cameraAngleData,
     },
-    {
-      title: "Style",
-      name: "style",
-      icon: <PhotoFilter />,
-      options: stylesData,
-    },
-    {
-      title: "Color Type",
-      name: "colorType",
-      icon: <ColorLens />,
-      options: colorTypeData,
-    },
+    // {
+    //   title: "Style",
+    //   name: "style",
+    //   icon: <PhotoFilter />,
+    //   options: stylesData,
+    // },
+    // {
+    //   title: "Color Type",
+    //   name: "colorType",
+    //   icon: <ColorLens />,
+    //   options: colorTypeData,
+    // },
     {
       title: "Shot Type",
       name: "shotType",
@@ -178,7 +178,7 @@ const GenerateFrameMain = ({ selectedFrame, closeGenerateFrame }) => {
             placeholder="Enter the description"
             multiline
             variant="outlined"
-            rows={2}
+            rows={14}
             value={requestData.description}
             onChange={(e) =>
               setRequestData((prev) => ({
@@ -188,7 +188,6 @@ const GenerateFrameMain = ({ selectedFrame, closeGenerateFrame }) => {
             }
             InputProps={{
               sx: {
-                height: "60px",
                 bgcolor: "greys.lighter",
                 borderRadius: "12px",
                 marginTop: 1,

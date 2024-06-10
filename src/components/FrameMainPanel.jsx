@@ -29,7 +29,7 @@ const FrameMainPanel = ({
   const [canvasWH, setCanvasWidthHeight] = useState({ width: 0, height: 0 });
   const aspectRatioForImages = "1:1";
   const mainPanelStyle = {
-    width: "50%",
+    width: "100%",
     padding: "10px",
     display: "flex",
     flexDirection: "column",
@@ -106,7 +106,7 @@ const FrameMainPanel = ({
         } else if (aspectRatioForImages === "3:2") {
           canvasWidth = 550;
         } else if (aspectRatioForImages === "1:1") {
-          canvasWidth = 400;
+          canvasWidth = 550;
         } else {
           canvasWidth = imageCanvas.parentElement.clientWidth;
         }
@@ -151,26 +151,89 @@ const FrameMainPanel = ({
     <Box sx={mainPanelStyle}>
       {!isRegenerateScene && (
         <>
-          <Box sx={{ position: "relative", paddingTop: "10px" }}>
+          <Box sx={{ position: "relative", paddingTop: "10px",display:"flex",justifyContent:"space-between",alignItems:"center",px:2 }}>
             {/* Current frame / total frame display */}
-            <Typography
-              variant="body1"
-              sx={{
-                fontSize: "14px",
-                position: "absolute",
-                top: "50%",
-                left: "50%",
-                transform: "translate(-50%)", // Center align
-                textAlign: "center",
-              }}
-            >
-              Frame {selectedFrame + 1} / {framesData.length}
-            </Typography>
+              <Button
+                variant="contained"
+                disabled={selectedFrame === 0}
+                onClick={() => {
+                  selectedFrame > 0 ? setSelectedFrame(selectedFrame - 1) : null;
+                  setSelectedFrameUrl(framesData[selectedFrame - 1].activeUrl);
+                }}
+                sx={{
+                  // position: "absolute",
+                  // left: "0",
+                  // top: "50%",
+                  bgcolor: "white",
+                  color: selectedFrame > 0 ? "black" : "greys.light",
+                  "&:hover": { bgcolor: "white" },
+                }}
+              >
+                {/* <ArrowLeftIcon /> */}
+                <img
+                  src={LeftArrowIcon}
+                  style={{
+                    width: "20px",
+                    height: "20px",
+                    filter: selectedFrame > 0 ? "invert(100%)" : "invert(50%)",
+                  }}
+                />
+              </Button>
+  
+                <Typography
+                  variant="body1"
+                  sx={{
+                    fontSize: "14px",
+                    position: "absolute",
+                    top: "50%",
+                    left: "50%",
+                    transform: "translate(-50%)", // Center align
+                    textAlign: "center",
+                  }}
+                >
+                  Frame {selectedFrame + 1} / {framesData.length}
+                </Typography>
+
+              {/* Next button with right arrow */}
+              <Button
+                variant="contained"
+                disabled={selectedFrame === framesData.length - 1}
+                onClick={() => {
+                  selectedFrame < framesData.length - 1
+                    ? setSelectedFrame(selectedFrame + 1)
+                    : null;
+                  setSelectedFrameUrl(framesData[selectedFrame + 1].activeUrl);
+                }}
+                sx={{
+                  // position: "absolute",
+                  // right: "0",
+                  // top: "50%",
+                  bgcolor: "white",
+                  color:
+                    selectedFrame < framesData.length - 1
+                      ? "black"
+                      : "greys.light",
+                  "&:hover": { bgcolor: "white" },
+                }}
+              >
+                <img
+                  src={RighttArrowIcon}
+                  style={{
+                    width: "20px",
+                    height: "20px",
+                    filter:
+                      selectedFrame < framesData.length - 1
+                        ? "invert(100%)"
+                        : "invert(50%)",
+                  }}
+                />
+                {/* <ArrowRightIcon /> */}
+              </Button>
           </Box>
           <Box
             sx={{
               position: "relative",
-              marginTop: "40px",
+              py:2,
               width: "100%",
               height: "fit-content",
               marginX: "auto",
@@ -179,68 +242,6 @@ const FrameMainPanel = ({
               justifyContent: "center",
             }}
           >
-            <Button
-              variant="contained"
-              disabled={selectedFrame === 0}
-              onClick={() => {
-                selectedFrame > 0 ? setSelectedFrame(selectedFrame - 1) : null;
-                setSelectedFrameUrl(framesData[selectedFrame - 1].activeUrl);
-              }}
-              sx={{
-                position: "absolute",
-                left: "0",
-                top: "50%",
-                bgcolor: "white",
-                color: selectedFrame > 0 ? "black" : "greys.light",
-                "&:hover": { bgcolor: "white" },
-              }}
-            >
-              {/* <ArrowLeftIcon /> */}
-              <img
-                src={LeftArrowIcon}
-                style={{
-                  width: "20px",
-                  height: "20px",
-                  filter: selectedFrame > 0 ? "invert(100%)" : "invert(50%)",
-                }}
-              />
-            </Button>
-
-            {/* Next button with right arrow */}
-            <Button
-              variant="contained"
-              disabled={selectedFrame === framesData.length - 1}
-              onClick={() => {
-                selectedFrame < framesData.length - 1
-                  ? setSelectedFrame(selectedFrame + 1)
-                  : null;
-                setSelectedFrameUrl(framesData[selectedFrame + 1].activeUrl);
-              }}
-              sx={{
-                position: "absolute",
-                right: "0",
-                top: "50%",
-                bgcolor: "white",
-                color:
-                  selectedFrame < framesData.length - 1
-                    ? "black"
-                    : "greys.light",
-                "&:hover": { bgcolor: "white" },
-              }}
-            >
-              <img
-                src={RighttArrowIcon}
-                style={{
-                  width: "20px",
-                  height: "20px",
-                  filter:
-                    selectedFrame < framesData.length - 1
-                      ? "invert(100%)"
-                      : "invert(50%)",
-                }}
-              />
-              {/* <ArrowRightIcon /> */}
-            </Button>
             <div
               style={{
                 position: "relative",
@@ -486,7 +487,7 @@ const FrameMainPanel = ({
               </Box>
             </div>
           </Box>
-          <Box
+          {/* <Box
             sx={{
               mt: 1,
               backgroundColor: "white",
@@ -523,13 +524,13 @@ const FrameMainPanel = ({
             >
               {framesData[selectedFrame].prompt}
             </Typography>
-          </Box>
+          </Box> */}
         </>
       )}
       {isRegenerateScene && (
         <Box
           width={"100%"}
-          height={"100%"}
+          height={"65vh"}
           sx={{
             display: "flex",
             alignItems: "center",
